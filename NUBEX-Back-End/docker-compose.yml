@@ -1,0 +1,15 @@
+services:
+  banco:
+    image: postgres:16
+    container_name: nubex-postgres
+    environment:
+      POSTGRES_DB: nubex
+      POSTGRES_USER: nubex
+      POSTGRES_PASSWORD: nubex123
+    ports:
+      - "5433:5432"
+    volumes:
+      - nubex-dados:/var/lib/postgresql/data
+
+volumes:
+  nubex-dados:
