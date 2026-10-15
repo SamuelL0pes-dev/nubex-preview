@@ -5,11 +5,12 @@ services:
     environment:
       POSTGRES_DB: nubex
       POSTGRES_USER: nubex
-      POSTGRES_PASSWORD: nubex123
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5433:5432"
     volumes:
       - nubex-dados:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
 
 volumes:
   nubex-dados:

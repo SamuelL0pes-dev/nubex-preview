@@ -19,10 +19,10 @@
 <modules>
 <module>nubex-common</module>
 <!-- <module>usuario-service</module> -->
-<!-- <module>agendamento-service</module> -->
-<!-- <module>catalogo-service</module> -->
+<module>agendamento-service</module>
+<module>catalogo-service</module>
 <!-- <module>projeto-service</module> -->
-<!-- <module>conteudo-service</module> -->
+<module>conteudo-service</module>
 </modules>
 <dependencyManagement>
 <dependencies>

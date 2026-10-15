@@ -1,0 +1,5 @@
+CREATE DATABASE usuario;
+CREATE DATABASE agendamento;
+CREATE DATABASE catalogo;
+CREATE DATABASE projeto;
+CREATE DATABASE conteudo;

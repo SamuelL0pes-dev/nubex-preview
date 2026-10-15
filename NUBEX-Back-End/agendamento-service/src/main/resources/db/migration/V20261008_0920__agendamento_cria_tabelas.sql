@@ -1,0 +1,5 @@
+CREATE TABLE feriado (
+    id BIGSERIAL PRIMARY KEY,
+    data DATE NOT NULL UNIQUE,
+    descricao VARCHAR(120) NOT NULL
+);
