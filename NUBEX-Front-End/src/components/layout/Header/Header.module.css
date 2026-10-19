@@ -1,0 +1,342 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  color: white;
+  transition: color 0.3s ease-out;
+}
+
+.headerSolido {
+  color: var(--cor-texto)
+}
+
+.headerSolido .barraPrincipal {
+  background: rgba(255, 255, 255, 0.8);
+  border-bottom-color: var(--cor-borda);
+  backdrop-filter: blur(10px);
+}
+
+.headerSolido .logoBranca {
+  opacity: 0;
+}
+
+.headerSolido .logoColorida {
+  opacity: 1;
+}
+
+.barraPrincipal {
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  padding-block: 16px;
+  transition: background-color 0.3s ease-out, border-color 0.3s ease-out;
+}
+
+.nav {
+  flex: 1;
+}
+
+.cta {
+  background: var(--cor-acao);
+  color: white;
+  padding: 8px 15px;
+  border-radius: 10px;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 14px;
+  margin-left: auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease-out;
+}
+
+.cta:hover {
+  background: var(--cor-acao-hover);
+}
+
+.cta:hover::after {
+  left: 140%;
+}
+
+.container {
+  max-width: none;
+  margin-inline: auto;
+  padding-inline: 32px;
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+
+.menu {
+  gap: 4px;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 14px;
+  color: inherit;
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+}
+
+.logo {
+  position: relative;
+  display: block;
+}
+
+.logoColorida {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.logo img {
+height: 48px;
+width: auto;
+display: block;
+transition: opacity 0.3s ease-out;
+}
+
+.itemDropdown {
+  position: relative;
+}
+
+.itemMenu {
+  background: none;
+  border: none;
+  padding: 6px 14px;
+  font: inherit;
+  color: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  border-radius: 9999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: background-color 0.15s ease-out;
+}
+
+.submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  list-style: none;
+  margin: 0;
+  background: var(--cor-fundo);
+  padding: 8px 0;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0.2s;
+  color: var(--cor-texto);
+}
+
+.submenu a {
+  display: block;
+  padding: 8px 16px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.submenu a:hover {
+  background: var(--cor-superficie);
+  color: var(--cor-acao);
+}
+
+.submenu.submenuAberto { 
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.submenu.submenuAberto li {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.seta {
+  display: inline-block;
+  margin-left: 8px;
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  margin-bottom: 3px;
+  transition: transform 0.2s ease-out;
+}
+
+.itemMenu:hover,
+.itemMenu[aria-expanded="true"] {
+  background: var(--cor-realce);
+}
+
+.itemAtivo {
+  background: var(--cor-realce);
+  font-weight: 700;
+}
+
+.submenu.submenuAberto li:nth-child(1) { transition-delay: 0.05s; }
+.submenu.submenuAberto li:nth-child(2) { transition-delay: 0.10s; }
+.submenu.submenuAberto li:nth-child(3) { transition-delay: 0.15s; }
+.submenu.submenuAberto li:nth-child(4) { transition-delay: 0.20s; }
+.submenu.submenuAberto li:nth-child(5) { transition-delay: 0.25s; }
+.submenu.submenuAberto li:nth-child(6) { transition-delay: 0.30s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .submenu,
+  .submenu li { transition: none; }
+  .cta::after { display: none; }
+  .header, .barraPrincipal { transition: none; }
+}
+
+.itemMenu[aria-expanded="true"] .seta {
+  transform: rotate(225deg);
+}
+
+.submenu li {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+}
+
+.ctaSec {
+  margin-left: 12px;
+  padding: 7px 15px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
+  color: #ffffff;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background-color 0.25s, color 0.25s, border-color 0.25s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ctaSec svg {
+  width: 17px;
+  height: 17px;
+}
+
+.ctaSec:hover {
+  background: #ffffff;
+  color: var(--cor-acao-hover);
+  border-color: #ffffff;
+}
+
+.headerSolido .ctaSec {
+  border-color: var(--cor-acao);
+  color: var(--cor-acao);
+}
+
+.headerSolido .ctaSec:hover {
+  background: var(--cor-acao);
+  color: #ffffff;
+}
+
+.conta {
+  position: relative;
+  margin-left: 12px;
+}
+
+.contaBotao {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 230px;
+  padding: 7px 14px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
+  background: transparent;
+  color: #ffffff;
+  cursor: pointer;
+  font: 600 14px system-ui;
+}
+
+.contaNome {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contaSeta {
+  transition: transform 0.25s;
+}
+
+.contaBotao[aria-expanded="true"] .contaSeta {
+  transform: rotate(180deg);
+}
+
+.headerSolido .contaBotao {
+  border-color: #cdd6e8;
+  color: var(--cor-texto);
+}
+
+.contaMenu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 190px;
+  background: #ffffff;
+  border: 1px solid var(--cor-borda);
+  border-radius: 12px;
+  box-shadow: 0 18px 40px rgba(0, 20, 60, 0.18);
+  padding: 6px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+}
+
+.contaAberta {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.contaRotulo {
+  padding: 6px 14px 4px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #9aa3b6;
+}
+
+.contaMenu a {
+  display: block;
+  padding: 9px 14px;
+  text-decoration: none;
+  color: var(--cor-texto);
+  font-size: 0.9rem;
+}
+
+.contaMenu a:hover {
+  background: var(--cor-superficie);
+}
+
+.contaMenu a.contaSair {
+  color: #d32f2f;
+}

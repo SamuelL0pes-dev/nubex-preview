@@ -1,122 +1,58 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { Routes, Route, useLocation } from "react-router-dom";
+import Header from "./components/layout/Header";
+import Footer from "./components/layout/Footer";
+import Breadcrumb from "./components/layout/Breadcrumb";
+import ScrollToTop from "./components/layout/ScrollToTop";
 
-function App() {
-  const [count, setCount] = useState(0)
+import Home from "./pages/Home/Home";
+import QuemSomos from "./pages/QuemSomos/QuemSomos";
+import MissaoVisaoValores from "./pages/MissaoVisaoValores/MissaoVisaoValores";
+import UnidadesList from "./pages/Unidades/UnidadesList";
+import UnidadeDetail from "./pages/Unidades/UnidadeDetail";
+import Servicos from "./pages/Servicos/Servicos";
+import Diferenciais from "./pages/Diferenciais/Diferenciais";
+import Agendamento from "./pages/Agendamento/Agendamento";
+import Avisos from "./pages/Avisos/Avisos";
+import FAQ from "./pages/FAQ/FAQ";
+import Contato from "./pages/Contato/Contato";
+import Parceiros from "./pages/Parceiros/Parceiros";
+import Projetos from "./pages/Projetos/Projetos";
+import Noticias from "./pages/Noticias/Noticias";
+import Login from "./pages/Login/Login";
+import NotFound from "./pages/NotFound/NotFound";
+
+export default function App() {
+  const location = useLocation();
+  const isLoginPage = location.pathname === "/login";
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+      <ScrollToTop />
+      {!isLoginPage && <Header />}
+      {!isLoginPage && <Breadcrumb />}
 
-      <div className="ticks"></div>
+      <main style={{ flex: 1 }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/quem-somos" element={<QuemSomos />} />
+          <Route path="/missao-visao-valores" element={<MissaoVisaoValores />} />
+          <Route path="/unidades" element={<UnidadesList />} />
+          <Route path="/unidades/:slug" element={<UnidadeDetail />} />
+          <Route path="/servicos" element={<Servicos />} />
+          <Route path="/diferenciais" element={<Diferenciais />} />
+          <Route path="/agendamento" element={<Agendamento />} />
+          <Route path="/avisos" element={<Avisos />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/contato" element={<Contato />} />
+          <Route path="/parceiros" element={<Parceiros />} />
+          <Route path="/projetos" element={<Projetos />} />
+          <Route path="/noticias" element={<Noticias />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      {!isLoginPage && <Footer />}
+    </div>
+  );
 }
-
-export default App

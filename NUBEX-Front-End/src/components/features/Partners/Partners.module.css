@@ -1,0 +1,351 @@
+
+.secao {
+  position: relative;
+  padding: 0 0 96px;
+  background: #ffffff;
+}
+
+.faixa {
+  position: relative;
+  top: -2px;
+  padding: 92px 24px 72px;
+  color: #ffffff;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  background: linear-gradient(90deg, var(--cor-acao-hover) 0%, var(--cor-acao) 58%, #1f6bff 100%);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 70px), 0 100%);
+  background: var(--faixa-azul);
+}
+
+.faixa::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.45;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.28) 1.2px, transparent 1.3px);
+  background-size: 30px 30px;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 26%);
+          mask-image: linear-gradient(180deg, transparent 0, #000 26%);
+}
+
+.interno {
+  position: relative;
+  z-index: 2;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.cabecalho {
+  text-align: center;
+  max-width: 70ch;
+  margin: 0 auto 8px;
+}
+
+.selo {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #eaf1ff;
+  background: rgba(255, 255, 255, 0.16);
+  padding: 8px 16px;
+  border-radius: 99px;
+  margin-bottom: 18px;
+}
+
+.tituloSecao {
+  margin: 0 0 12px;
+  font-size: clamp(1.7rem, 1.2rem + 1.5vw, 2.3rem);
+  line-height: 1.2;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.tituloSecao em { font-style: normal; color: #9ff0d2; }
+
+.subtitulo { margin: 0; color: #d8e4ff; }
+.subtitulo b { color: #ffffff; }
+
+.traco {
+  width: 64px;
+  height: 4px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #ffffff, var(--cor-verde));
+  margin: 18px auto 0;
+}
+
+
+.corpo {
+  position: relative;
+  overflow: hidden;
+  padding: 18px 24px 0;
+}
+
+.palco {
+  position: relative;
+  width: min(760px, 94vw);
+  aspect-ratio: 1;
+  margin: 8px auto 0;
+}
+
+
+.campo {
+  position: absolute;
+  inset: -46%;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    radial-gradient(circle, rgba(0, 74, 247, 0.13), rgba(0, 179, 122, 0.07) 30%, transparent 58%),
+    repeating-radial-gradient(circle, transparent 0 45px, rgba(0, 74, 247, 0.10) 45px 46px);
+  -webkit-mask-image: radial-gradient(closest-side, #000 34%, transparent 80%);
+          mask-image: radial-gradient(closest-side, #000 34%, transparent 80%);
+}
+
+.aro {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  border: 1px dashed rgba(0, 74, 247, 0.16);
+  animation: nubexGirarOrbita var(--v) linear infinite;
+}
+.aro1 { inset: -16%; --v: 90s; }
+.aro2 { inset: -30%; --v: 130s; animation-direction: reverse; border-color: rgba(0, 179, 122, 0.16); }
+.aro3 { inset: -44%; --v: 170s; border-style: dotted; border-color: rgba(0, 74, 247, 0.14); }
+
+.aro::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  translate: -50% 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cor-acao);
+  opacity: 0.35;
+}
+.aro2::before { background: var(--cor-verde); width: 7px; height: 7px; }
+.aro3::before { width: 6px; height: 6px; opacity: 0.28; }
+
+.nucleo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 52%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, #fff 0 48%, rgba(255, 255, 255, 0) 76%);
+}
+
+.trilha {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(0, 74, 247, 0.5);
+}
+.trilhaExterna { inset: 6%; }
+.trilhaInterna { inset: 27%; }
+
+.anel {
+  position: absolute;
+  animation: nubexGirarOrbita var(--tempo) linear infinite;
+}
+.anelExterno { inset: 6%;  --tempo: 52s; }
+.anelInterno { inset: 27%; --tempo: 38s; animation-direction: reverse; }
+
+.palco:hover .anel,
+.palco:hover .contra { animation-play-state: paused; }
+
+@keyframes nubexGirarOrbita { to { transform: rotate(360deg); } }
+
+.orbe {
+  position: absolute;
+  inset: 0;
+  transform: rotate(var(--a));
+  pointer-events: none;
+}
+
+.braco {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% -50%;
+  transform: rotate(calc(-1 * var(--a)));
+}
+
+.contra {
+  position: relative;
+  animation: nubexGirarOrbita var(--tempo) linear infinite reverse;
+}
+.anelInterno .contra { animation-direction: normal; }
+
+.parceiro {
+  pointer-events: auto;
+  position: relative;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  padding: 0;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  border: 2px solid transparent;
+  background: linear-gradient(#fff, #fff) padding-box,
+              linear-gradient(145deg, #e8ecf5, #dfe6f3) border-box;
+  box-shadow: 0 10px 24px rgba(0, 20, 60, 0.10), inset 0 1px 0 #fff;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s, background 0.3s;
+}
+
+.anelInterno .parceiro { width: 78px; height: 78px; }
+
+.parceiro img {
+  width: 74%;
+  height: 74%;
+  object-fit: contain;
+  border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.parceiro::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.55) 0 24%, rgba(255, 255, 255, 0) 52%);
+}
+
+.parceiro::before {
+  content: "";
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  z-index: -1;
+  background: radial-gradient(circle, rgba(0, 74, 247, 0.35), rgba(0, 179, 122, 0.18) 55%, transparent 70%);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.parceiro:hover,
+.parceiro:focus-visible {
+  outline: none;
+  transform: scale(1.14);
+  background: linear-gradient(#fff, #fff) padding-box,
+              conic-gradient(from var(--ang), var(--cor-acao), var(--cor-verde), #7b2ff7, var(--cor-acao)) border-box;
+  box-shadow: 0 18px 38px rgba(0, 20, 60, 0.22), inset 0 1px 0 #fff;
+}
+
+.parceiro:hover img { transform: scale(1.06); }
+
+.parceiro:hover::before,
+.parceiro:focus-visible::before { opacity: 1; transform: scale(1); }
+
+.nomeParceiro {
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  top: 96px;
+  white-space: nowrap;
+  font: 600 12px system-ui;
+  color: var(--cor-texto-suave);
+  background: rgba(255, 255, 255, 0.94);
+  padding: 3px 9px;
+  border-radius: 99px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.anelInterno .nomeParceiro { top: 86px; }
+
+.parceiro:hover + .nomeParceiro,
+.parceiro:focus-visible + .nomeParceiro { opacity: 1; }
+
+.centro {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 26%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 20px 50px rgba(0, 20, 60, 0.16);
+  transition: scale 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.centro::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  padding: 6px;
+  pointer-events: none;
+  background: conic-gradient(from var(--ang), var(--cor-acao), var(--cor-verde), #7b2ff7, var(--cor-acao));
+  animation: nubexGirarBorda 6s linear infinite;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+}
+
+.centro img { width: 64%; object-fit: contain; }
+.centro:hover { scale: 1.05; }
+
+@keyframes nubexGirarBorda { to { --ang: 360deg; } }
+
+.pulso {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 26%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 74, 247, 0.32);
+  animation: nubexPulsar 3.4s ease-out infinite;
+  pointer-events: none;
+}
+.pulsoB { animation-delay: 1.7s; }
+
+@keyframes nubexPulsar {
+  from { scale: 1;   opacity: 0.7; }
+  to   { scale: 2.2; opacity: 0; }
+}
+
+
+.rodape {
+  text-align: center;
+  margin-top: 30px;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+.rodape button {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  color: var(--cor-acao);
+  font-weight: 600;
+}
+.rodape button:hover { text-decoration: underline; }
+
+@media (max-width: 760px) {
+  .parceiro { width: 62px; height: 62px; }
+  .anelInterno .parceiro { width: 52px; height: 52px; }
+  .centro, .pulso { width: 22%; }
+  .nomeParceiro { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anel, .contra, .pulso, .centro::before, .aro { animation: none; }
+}
