@@ -11,7 +11,7 @@ public class Servico {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "unidade_id", nullable = false)
-    private UnidadeEstrategica unidadeId;
+    private UnidadeEstrategica unidade;
 
     @Column(nullable = false, length = 100)
     private String categoria;
@@ -32,8 +32,8 @@ public class Servico {
         return id;
     }
 
-    public UnidadeEstrategica getUnidadeId() {
-        return unidadeId;
+    public UnidadeEstrategica getUnidade() {
+        return unidade;
     }
 
     public String getCategoria() {
@@ -52,8 +52,8 @@ public class Servico {
         return ativo;
     }
 
-    public void setUnidadeId(UnidadeEstrategica unidadeId) {
-        this.unidadeId = unidadeId;
+    public void setUnidade(UnidadeEstrategica unidade) {
+        this.unidade = unidade;
     }
 
     public void setCategoria(String categoria) {

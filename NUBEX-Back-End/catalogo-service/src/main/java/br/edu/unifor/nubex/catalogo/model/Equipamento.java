@@ -11,7 +11,7 @@ public class Equipamento {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "laboratorio_id", nullable = false)
-    private Laboratorio laboratorioId;
+    private Laboratorio laboratorio;
 
     @Column(nullable = false, length = 150)
     private String nome;
@@ -33,8 +33,8 @@ public class Equipamento {
         return id;
     }
 
-    public Laboratorio getLaboratorioId() {
-        return laboratorioId;
+    public Laboratorio getLaboratorio() {
+        return laboratorio;
     }
 
     public String getNome() {
@@ -53,8 +53,8 @@ public class Equipamento {
         return ativo;
     }
 
-    public void setLaboratorioId(Laboratorio laboratorioId) {
-        this.laboratorioId = laboratorioId;
+    public void setLaboratorio(Laboratorio laboratorio) {
+        this.laboratorio = laboratorio;
     }
 
     public void setNome(String nome) {

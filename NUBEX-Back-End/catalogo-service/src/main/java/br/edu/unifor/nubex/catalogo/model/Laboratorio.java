@@ -11,7 +11,7 @@ public class Laboratorio {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "unidade_id", nullable = false)
-    private UnidadeEstrategica unidadeId;
+    private UnidadeEstrategica unidade;
 
     @Column(nullable = false, length = 150)
     private String nome;
@@ -29,8 +29,8 @@ public class Laboratorio {
         return id;
     }
 
-    public UnidadeEstrategica getUnidadeId() {
-        return unidadeId;
+    public UnidadeEstrategica getUnidade() {
+        return unidade;
     }
 
     public String getNome() {
@@ -45,8 +45,8 @@ public class Laboratorio {
         return ativo;
     }
 
-    public void setUnidadeId(UnidadeEstrategica unidadeId) {
-        this.unidadeId = unidadeId;
+    public void setUnidade(UnidadeEstrategica unidade) {
+        this.unidade = unidade;
     }
 
     public void setNome(String nome) {
