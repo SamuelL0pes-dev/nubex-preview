@@ -1,0 +1,6 @@
+# Copie esse arquivo para a application-dev.properties (na mesma pasta) e
+# preencha com a mesma senha do POSTGRES_PASSWORD no .env
+
+spring.datasource.url=jdbc:postgresql://localhost:5433/usuario
+spring.datasource.username=nubex
+spring.datasource.password=defina-a-mesma-senha-do-env
