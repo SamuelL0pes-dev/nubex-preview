@@ -4,18 +4,19 @@ import PartnersList from "../../components/features/Partners/PartnersList";
 
 export default function Parceiros() {
   const { hash } = useLocation();
-  const [destacado, setDestacado] = useState("");
+  return <ParceirosConteudo key={hash} hash={hash} />;
+}
+
+function ParceirosConteudo({ hash }: { hash: string }) {
+  const [destacado, setDestacado] = useState(() => hash.replace("#", ""));
 
   useEffect(() => {
     const id = hash.replace("#", "");
 
     if (!id) {
-      setDestacado("");
       window.scrollTo(0, 0);
       return;
     }
-
-    setDestacado(id);
 
     const alvo = document.getElementById(id);
     alvo?.scrollIntoView({ behavior: "smooth", block: "center" });

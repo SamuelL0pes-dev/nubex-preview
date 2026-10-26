@@ -1,6 +1,22 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useSyncExternalStore } from "react";
 import { COUNTERS_DATA, type CounterItem } from "./AnimatedCounters.data";
 import styles from "./AnimatedCounters.module.css";
+
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+function subscribeReducedMotion(onChange: () => void) {
+  const media = window.matchMedia(REDUCED_MOTION_QUERY);
+  media.addEventListener("change", onChange);
+  return () => media.removeEventListener("change", onChange);
+}
+
+function getReducedMotion() {
+  return window.matchMedia(REDUCED_MOTION_QUERY).matches;
+}
+
+function getServerReducedMotion() {
+  return false;
+}
 
 function CounterItemView({
   item,
@@ -10,44 +26,44 @@ function CounterItemView({
   isVisible: boolean;
 }) {
   const [count, setCount] = useState(0);
+  const prefersReducedMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotion,
+    getServerReducedMotion,
+  );
 
   useEffect(() => {
     if (!isVisible) return;
 
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (prefersReducedMotion) {
-      setCount(item.valorFinal);
-      return;
-    }
+    if (prefersReducedMotion) return;
 
     let startTime: number | null = null;
+    let frameId: number;
     const duracaoMs = 2000;
 
     const animate = (currentTime: number) => {
-      if (!startTime) startTime = currentTime;
+      if (startTime === null) startTime = currentTime;
       const progress = Math.min((currentTime - startTime) / duracaoMs, 1);
       const easeOut = 1 - Math.pow(1 - progress, 3);
 
       setCount(Math.floor(easeOut * item.valorFinal));
 
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        frameId = requestAnimationFrame(animate);
       } else {
         setCount(item.valorFinal);
       }
     };
 
-    const frameId = requestAnimationFrame(animate);
+    frameId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(frameId);
-  }, [isVisible, item.valorFinal]);
+  }, [isVisible, item.valorFinal, prefersReducedMotion]);
 
   return (
     <div className={styles.item}>
       <span className={styles.numero}>
         {item.prefixo || ""}
-        {count.toLocaleString("pt-BR")}
+        {(isVisible && prefersReducedMotion ? item.valorFinal : count).toLocaleString("pt-BR")}
         {item.sufixo || ""}
       </span>
       <p className={styles.frase}>{item.frase}</p>

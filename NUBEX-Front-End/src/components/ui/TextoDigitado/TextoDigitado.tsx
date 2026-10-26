@@ -17,7 +17,7 @@ export default function TextoDigitado({ texto, atraso = 0, cursorFinal = true }:
         const tempo = letras === 0 ? atraso : VELOCIDADE_MS;
         const id = setTimeout(() => setLetras(letras + 1), tempo);
         return () => clearTimeout(id);
-    }, [letras, texto.length, atraso]);
+    }, [letras, texto.length, atraso, terminou]);
     return (
   <>
     <span className={styles.acessivel}>{texto}</span>

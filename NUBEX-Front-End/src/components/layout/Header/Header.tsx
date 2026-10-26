@@ -5,6 +5,11 @@ import { USUARIO_ATUAL } from "../../../mocks/usuario";
 import { URL_PORTAL } from "../../../constants/portal";
 
 export default function Header() {
+  const { pathname } = useLocation();
+  return <HeaderContent key={pathname} pathname={pathname} />;
+}
+
+function HeaderContent({ pathname }: { pathname: string }) {
   
   const [menuAberto, setMenuAberto] = useState<"sobre" | "unidades" | null>(
     null,
@@ -12,8 +17,6 @@ export default function Header() {
   const [rolou, setRolou] = useState(false);
   const [contaAberta, setContaAberta] = useState(false);
   const contaRef = useRef<HTMLDivElement>(null);
-
-  const { pathname } = useLocation();
 
   const temHero = pathname === "/";
   const solido = rolou || !temHero;
@@ -26,11 +29,6 @@ export default function Header() {
     window.addEventListener("scroll", aoRolar, { passive: true });
     return () => window.removeEventListener("scroll", aoRolar);
   }, []);
-
-  useEffect(() => {
-    setMenuAberto(null);
-    setContaAberta(false);
-  }, [pathname]);
 
   useEffect(() => {
     if (!contaAberta) return;

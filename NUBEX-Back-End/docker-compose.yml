@@ -1,16 +1,131 @@
+# Desenvolvimento local: cada serviço usa seu próprio banco, conforme init.sql.
 services:
   banco:
     image: postgres:16
-    container_name: nubex-postgres
     environment:
       POSTGRES_DB: nubex
       POSTGRES_USER: nubex
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Preencha POSTGRES_PASSWORD no arquivo .env}
     ports:
-      - "5433:5432"
+      - "127.0.0.1:${POSTGRES_PORT:-5433}:5432"
     volumes:
       - nubex-dados:/var/lib/postgresql/data
-      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
-
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nubex -d nubex"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+  agendamento:
+    build:
+      context: .
+      args:
+        SERVICE: agendamento-service
+    environment:
+      DB_URL: jdbc:postgresql://banco:5432/agendamento
+      DB_USER: nubex
+      DB_PASSWORD: ${POSTGRES_PASSWORD:?Preencha POSTGRES_PASSWORD no arquivo .env}
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: dev
+    ports:
+      - "127.0.0.1:${AGENDAMENTO_PORT:-8082}:8080"
+    depends_on:
+      banco:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/actuator/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+  catalogo:
+    build:
+      context: .
+      args:
+        SERVICE: catalogo-service
+    environment:
+      DB_URL: jdbc:postgresql://banco:5432/catalogo
+      DB_USER: nubex
+      DB_PASSWORD: ${POSTGRES_PASSWORD:?Preencha POSTGRES_PASSWORD no arquivo .env}
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: dev
+    ports:
+      - "127.0.0.1:${CATALOGO_PORT:-8083}:8080"
+    depends_on:
+      banco:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/actuator/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+  conteudo:
+    build:
+      context: .
+      args:
+        SERVICE: conteudo-service
+    environment:
+      DB_URL: jdbc:postgresql://banco:5432/conteudo
+      DB_USER: nubex
+      DB_PASSWORD: ${POSTGRES_PASSWORD:?Preencha POSTGRES_PASSWORD no arquivo .env}
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: dev
+    ports:
+      - "127.0.0.1:${CONTEUDO_PORT:-8085}:8080"
+    depends_on:
+      banco:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/actuator/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+  usuario:
+    build:
+      context: .
+      args:
+        SERVICE: usuario-service
+    environment:
+      DB_URL: jdbc:postgresql://banco:5432/usuario
+      DB_USER: nubex
+      DB_PASSWORD: ${POSTGRES_PASSWORD:?Preencha POSTGRES_PASSWORD no arquivo .env}
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: dev
+    ports:
+      - "127.0.0.1:${USUARIO_PORT:-8081}:8080"
+    depends_on:
+      banco:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/actuator/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+  projeto:
+    build:
+      context: .
+      args:
+        SERVICE: projeto-service
+    environment:
+      DB_URL: jdbc:postgresql://banco:5432/projeto
+      DB_USER: nubex
+      DB_PASSWORD: ${POSTGRES_PASSWORD:?Preencha POSTGRES_PASSWORD no arquivo .env}
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: dev
+    ports:
+      - "127.0.0.1:${PROJETO_PORT:-8084}:8080"
+    depends_on:
+      banco:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/actuator/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
 volumes:
   nubex-dados:

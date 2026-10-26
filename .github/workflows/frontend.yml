@@ -1,0 +1,35 @@
+name: Frontend
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frontend:
+    name: Frontend - lint e build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: NUBEX-Front-End
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: NUBEX-Front-End/package-lock.json
+      - name: Instalar dependências do lockfile
+        run: npm ci
+      - name: Verificar código
+        run: npm run lint
+      - name: Compilar frontend
+        run: npm run build
+      - name: Executar testes do frontend
+        run: npm test
