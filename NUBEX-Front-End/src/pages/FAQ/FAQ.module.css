@@ -1,0 +1,489 @@
+.pagina {
+  padding-bottom: 96px;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 64px 24px 72px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--cor-acao) 7%, var(--cor-fundo)) 0%,
+    var(--faixa-corte) 60%,
+    color-mix(in srgb, var(--cor-verde) 7%, var(--cor-fundo)) 100%
+  );
+}
+
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  border-style: solid;
+  pointer-events: none;
+}
+
+.hero::before {
+  width: 420px;
+  height: 420px;
+  right: -80px;
+  top: -140px;
+  border-width: 48px;
+  border-color: color-mix(in srgb, var(--cor-acao) 7%, transparent);
+}
+
+.hero::after {
+  width: 220px;
+  height: 220px;
+  right: 260px;
+  bottom: -150px;
+  border-width: 28px;
+  border-color: color-mix(in srgb, var(--cor-verde) 12%, transparent);
+}
+
+.heroConteudo {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cor-acao);
+}
+
+.titulo {
+  max-width: 780px;
+  margin: 14px 0 18px;
+  font-size: clamp(2rem, 4.4vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: #00143c;
+}
+
+.tituloDestaque {
+  color: var(--cor-acao);
+}
+
+.descricao {
+  max-width: 620px;
+  margin: 0 0 32px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--cor-texto-suave);
+}
+
+.busca {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 640px;
+  padding: 6px 8px 6px 18px;
+  background: var(--cor-fundo);
+  border: 1px solid var(--cor-borda);
+  border-radius: 14px;
+  box-shadow: 0 14px 32px rgba(0, 20, 60, 0.08);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.busca:focus-within {
+  border-color: var(--cor-acao);
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--cor-acao) 15%, transparent),
+    0 14px 32px rgba(0, 20, 60, 0.08);
+}
+
+.buscaIcone {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: var(--cor-acao);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+.rotuloOculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.buscaCampo {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 0;
+  font: inherit;
+  color: var(--cor-texto);
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.buscaCampo::placeholder {
+  color: var(--cor-texto-suave);
+}
+
+.buscaCampo::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.buscaLimpar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--cor-texto-suave);
+  background: var(--cor-superficie);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.buscaLimpar:hover {
+  color: var(--cor-acao);
+  background: color-mix(in srgb, var(--cor-acao) 10%, var(--cor-fundo));
+}
+
+.corpo {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 64px;
+  align-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 72px 24px 0;
+}
+
+.lateral {
+  position: sticky;
+  top: 110px;
+}
+
+.lateralTitulo {
+  margin: 12px 0 16px;
+  font-size: 2.1rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #00143c;
+}
+
+.lateralTexto {
+  margin: 0 0 28px;
+  line-height: 1.7;
+  color: var(--cor-texto-suave);
+}
+
+.temas {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 32px;
+}
+
+.tema {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  font: inherit;
+  font-size: 0.92rem;
+  text-align: left;
+  color: var(--cor-texto-suave);
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.tema:hover:not(:disabled) {
+  color: var(--cor-acao);
+  background: var(--faixa-corte);
+}
+
+.tema:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.temaAtivo,
+.temaAtivo:hover {
+  font-weight: 700;
+  color: var(--cor-acao);
+  background: color-mix(in srgb, var(--cor-acao) 8%, var(--cor-fundo));
+}
+
+.temaTotal {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.tema:focus-visible,
+.pergunta:focus-visible,
+.vazioBotao:focus-visible,
+.buscaLimpar:focus-visible,
+.botao:focus-visible {
+  outline: 2px solid var(--cor-acao);
+  outline-offset: 2px;
+}
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 15px 26px;
+  font-weight: 700;
+  color: white;
+  text-decoration: none;
+  background: var(--faixa-azul);
+  border-radius: 12px;
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--cor-acao) 28%, transparent);
+  transition: transform 0.2s ease;
+}
+
+.botao:hover {
+  transform: translateY(-2px);
+}
+
+.conteudo {
+  min-width: 0;
+}
+
+.resultado {
+  margin: 0 0 24px;
+  font-size: 0.9rem;
+  color: var(--cor-texto-suave);
+}
+
+.secao {
+  scroll-margin-top: 120px;
+}
+
+.secao + .secao {
+  margin-top: 56px;
+}
+
+.secaoTitulo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 16px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12rem;
+  text-transform: uppercase;
+  color: var(--cor-acao);
+}
+
+.secaoTitulo::before {
+  content: "";
+  width: 24px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--cor-verde);
+}
+
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--cor-borda);
+}
+
+.item {
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.perguntaTitulo {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.pergunta {
+  display: grid;
+  grid-template-columns: 44px 1fr 32px;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 22px 4px;
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  color: #00143c;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.pergunta:hover {
+  color: var(--cor-acao);
+}
+
+.numero {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--cor-texto-suave);
+  font-variant-numeric: tabular-nums;
+}
+
+.icone {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--cor-acao) 10%, var(--cor-fundo));
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.icone::before,
+.icone::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 2px;
+  background: var(--cor-acao);
+  border-radius: 2px;
+  transform: translate(-50%, -50%);
+  transition: background-color 0.3s ease;
+}
+
+.icone::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.itemAberto .icone {
+  transform: rotate(45deg);
+  background: var(--cor-acao);
+}
+
+.itemAberto .icone::before,
+.itemAberto .icone::after {
+  background: white;
+}
+
+.itemAberto .numero,
+.itemAberto .pergunta {
+  color: var(--cor-acao);
+}
+
+.resposta {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+
+.itemAberto .resposta {
+  grid-template-rows: 1fr;
+}
+
+.respostaConteudo {
+  overflow: hidden;
+}
+
+.respostaConteudo p {
+  margin: 0;
+  padding: 0 48px 22px 60px;
+  line-height: 1.7;
+  color: var(--cor-texto-suave);
+}
+
+.vazio {
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--cor-texto-suave);
+  background: var(--faixa-corte);
+  border: 1px dashed var(--cor-borda);
+  border-radius: 16px;
+}
+
+.vazio p {
+  margin: 0 0 16px;
+}
+
+.vazioBotao {
+  padding: 10px 20px;
+  font: inherit;
+  font-weight: 700;
+  color: var(--cor-acao);
+  background: var(--cor-fundo);
+  border: 1px solid var(--cor-acao);
+  border-radius: 10px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.vazioBotao:hover {
+  color: white;
+  background: var(--cor-acao);
+}
+
+@media (max-width: 960px) {
+  .corpo {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding-top: 48px;
+  }
+
+  .lateral {
+    position: static;
+  }
+}
+
+@media (max-width: 520px) {
+  .hero {
+    padding: 40px 16px 48px;
+  }
+
+  .hero::after {
+    display: none;
+  }
+
+  .corpo {
+    padding-inline: 16px;
+  }
+
+  .pergunta {
+    grid-template-columns: 32px 1fr 32px;
+    gap: 10px;
+  }
+
+  .respostaConteudo p {
+    padding: 0 8px 20px 42px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .resposta,
+  .icone,
+  .botao {
+    transition: none;
+  }
+}
