@@ -7,7 +7,7 @@
     url("/LaboratorioAboutINtro.avif");
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
+  background-attachment: scroll;
   border-top: 1px solid var(--cor-borda);
   border-bottom: 1px solid var(--cor-borda);
 }

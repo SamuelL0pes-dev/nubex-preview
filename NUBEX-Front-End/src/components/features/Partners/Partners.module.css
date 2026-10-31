@@ -1,4 +1,3 @@
-
 .secao {
   position: relative;
   padding: 0 0 96px;
@@ -11,7 +10,12 @@
   padding: 92px 24px 72px;
   color: #ffffff;
   border-top: 1px solid rgba(255, 255, 255, 0.22);
-  background: linear-gradient(90deg, var(--cor-acao-hover) 0%, var(--cor-acao) 58%, #1f6bff 100%);
+  background: linear-gradient(
+    90deg,
+    var(--cor-acao-hover) 0%,
+    var(--cor-acao) 58%,
+    #1f6bff 100%
+  );
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 70px), 0 100%);
   background: var(--faixa-azul);
 }
@@ -21,10 +25,14 @@
   position: absolute;
   inset: 0;
   opacity: 0.45;
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.28) 1.2px, transparent 1.3px);
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.28) 1.2px,
+    transparent 1.3px
+  );
   background-size: 30px 30px;
   -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 26%);
-          mask-image: linear-gradient(180deg, transparent 0, #000 26%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 26%);
 }
 
 .interno {
@@ -62,10 +70,18 @@
   letter-spacing: -0.02em;
 }
 
-.tituloSecao em { font-style: normal; color: #9ff0d2; }
+.tituloSecao em {
+  font-style: normal;
+  color: #9ff0d2;
+}
 
-.subtitulo { margin: 0; color: #d8e4ff; }
-.subtitulo b { color: #ffffff; }
+.subtitulo {
+  margin: 0;
+  color: #d8e4ff;
+}
+.subtitulo b {
+  color: #ffffff;
+}
 
 .traco {
   width: 64px;
@@ -74,7 +90,6 @@
   background: linear-gradient(90deg, #ffffff, var(--cor-verde));
   margin: 18px auto 0;
 }
-
 
 .corpo {
   position: relative;
@@ -89,7 +104,6 @@
   margin: 8px auto 0;
 }
 
-
 .campo {
   position: absolute;
   inset: -46%;
@@ -100,6 +114,7 @@
     repeating-radial-gradient(circle, transparent 0 45px, rgba(0, 74, 247, 0.10) 45px 46px);
   -webkit-mask-image: radial-gradient(closest-side, #000 34%, transparent 80%);
           mask-image: radial-gradient(closest-side, #000 34%, transparent 80%);
+  will-change: transform;
 }
 
 .aro {
@@ -108,10 +123,24 @@
   pointer-events: none;
   border: 1px dashed rgba(0, 74, 247, 0.16);
   animation: nubexGirarOrbita var(--v) linear infinite;
+  will-change: transform;
 }
-.aro1 { inset: -16%; --v: 90s; }
-.aro2 { inset: -30%; --v: 130s; animation-direction: reverse; border-color: rgba(0, 179, 122, 0.16); }
-.aro3 { inset: -44%; --v: 170s; border-style: dotted; border-color: rgba(0, 74, 247, 0.14); }
+.aro1 {
+  inset: -6%;
+  --v: 90s;
+}
+.aro2 {
+  inset: -14%;
+  --v: 130s;
+  animation-direction: reverse;
+  border-color: rgba(0, 179, 122, 0.16);
+}
+.aro3 {
+  inset: -22%;
+  --v: 170s;
+  border-style: dotted;
+  border-color: rgba(0, 74, 247, 0.14);
+}
 
 .aro::before {
   content: "";
@@ -125,8 +154,16 @@
   background: var(--cor-acao);
   opacity: 0.35;
 }
-.aro2::before { background: var(--cor-verde); width: 7px; height: 7px; }
-.aro3::before { width: 6px; height: 6px; opacity: 0.28; }
+.aro2::before {
+  background: var(--cor-verde);
+  width: 7px;
+  height: 7px;
+}
+.aro3::before {
+  width: 6px;
+  height: 6px;
+  opacity: 0.28;
+}
 
 .nucleo {
   position: absolute;
@@ -145,20 +182,38 @@
   border-radius: 50%;
   border: 1.5px dashed rgba(0, 74, 247, 0.5);
 }
-.trilhaExterna { inset: 6%; }
-.trilhaInterna { inset: 27%; }
+.trilhaExterna {
+  inset: 6%;
+}
+.trilhaInterna {
+  inset: 27%;
+}
 
 .anel {
   position: absolute;
   animation: nubexGirarOrbita var(--tempo) linear infinite;
+  will-change: transform;
 }
-.anelExterno { inset: 6%;  --tempo: 52s; }
-.anelInterno { inset: 27%; --tempo: 38s; animation-direction: reverse; }
+.anelExterno {
+  inset: 6%;
+  --tempo: 52s;
+}
+.anelInterno {
+  inset: 27%;
+  --tempo: 38s;
+  animation-direction: reverse;
+}
 
 .palco:hover .anel,
-.palco:hover .contra { animation-play-state: paused; }
+.palco:hover .contra {
+  animation-play-state: paused;
+}
 
-@keyframes nubexGirarOrbita { to { transform: rotate(360deg); } }
+@keyframes nubexGirarOrbita {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 .orbe {
   position: absolute;
@@ -179,7 +234,9 @@
   position: relative;
   animation: nubexGirarOrbita var(--tempo) linear infinite reverse;
 }
-.anelInterno .contra { animation-direction: normal; }
+.anelInterno .contra {
+  animation-direction: normal;
+}
 
 .parceiro {
   pointer-events: auto;
@@ -192,13 +249,22 @@
   display: grid;
   place-items: center;
   border: 2px solid transparent;
-  background: linear-gradient(#fff, #fff) padding-box,
-              linear-gradient(145deg, #e8ecf5, #dfe6f3) border-box;
-  box-shadow: 0 10px 24px rgba(0, 20, 60, 0.10), inset 0 1px 0 #fff;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s, background 0.3s;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(145deg, #e8ecf5, #dfe6f3) border-box;
+  box-shadow:
+    0 10px 24px rgba(0, 20, 60, 0.1),
+    inset 0 1px 0 #fff;
+  transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.3s,
+    background 0.3s;
 }
 
-.anelInterno .parceiro { width: 78px; height: 78px; }
+.anelInterno .parceiro {
+  width: 78px;
+  height: 78px;
+}
 
 .parceiro img {
   width: 74%;
@@ -214,7 +280,11 @@
   inset: 3px;
   border-radius: 50%;
   pointer-events: none;
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.55) 0 24%, rgba(255, 255, 255, 0) 52%);
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.55) 0 24%,
+    rgba(255, 255, 255, 0) 52%
+  );
 }
 
 .parceiro::before {
@@ -223,25 +293,47 @@
   inset: -14px;
   border-radius: 50%;
   z-index: -1;
-  background: radial-gradient(circle, rgba(0, 74, 247, 0.35), rgba(0, 179, 122, 0.18) 55%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(0, 74, 247, 0.35),
+    rgba(0, 179, 122, 0.18) 55%,
+    transparent 70%
+  );
   opacity: 0;
   transform: scale(0.8);
-  transition: opacity 0.3s, transform 0.3s;
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
 }
 
 .parceiro:hover,
 .parceiro:focus-visible {
   outline: none;
   transform: scale(1.14);
-  background: linear-gradient(#fff, #fff) padding-box,
-              conic-gradient(from var(--ang), var(--cor-acao), var(--cor-verde), #7b2ff7, var(--cor-acao)) border-box;
-  box-shadow: 0 18px 38px rgba(0, 20, 60, 0.22), inset 0 1px 0 #fff;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    conic-gradient(
+        from var(--ang),
+        var(--cor-acao),
+        var(--cor-verde),
+        #7b2ff7,
+        var(--cor-acao)
+      )
+      border-box;
+  box-shadow:
+    0 18px 38px rgba(0, 20, 60, 0.22),
+    inset 0 1px 0 #fff;
 }
 
-.parceiro:hover img { transform: scale(1.06); }
+.parceiro:hover img {
+  transform: scale(1.06);
+}
 
 .parceiro:hover::before,
-.parceiro:focus-visible::before { opacity: 1; transform: scale(1); }
+.parceiro:focus-visible::before {
+  opacity: 1;
+  transform: scale(1);
+}
 
 .nomeParceiro {
   position: absolute;
@@ -259,10 +351,14 @@
   pointer-events: none;
 }
 
-.anelInterno .nomeParceiro { top: 86px; }
+.anelInterno .nomeParceiro {
+  top: 86px;
+}
 
 .parceiro:hover + .nomeParceiro,
-.parceiro:focus-visible + .nomeParceiro { opacity: 1; }
+.parceiro:focus-visible + .nomeParceiro {
+  opacity: 1;
+}
 
 .centro {
   position: absolute;
@@ -289,18 +385,32 @@
   border-radius: 50%;
   padding: 6px;
   pointer-events: none;
-  background: conic-gradient(from var(--ang), var(--cor-acao), var(--cor-verde), #7b2ff7, var(--cor-acao));
-  animation: nubexGirarBorda 6s linear infinite;
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  background: conic-gradient(
+    from 0deg,
+    var(--cor-acao),
+    var(--cor-verde),
+    #7b2ff7,
+    var(--cor-acao)
+  );
+  animation: nubexGirarOrbita 6s linear infinite;
+  will-change: transform;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
-          mask-composite: exclude;
+  mask-composite: exclude;
 }
 
-.centro img { width: 64%; object-fit: contain; }
-.centro:hover { scale: 1.05; }
-
-@keyframes nubexGirarBorda { to { --ang: 360deg; } }
+.centro img {
+  width: 64%;
+  object-fit: contain;
+}
+.centro:hover {
+  scale: 1.05;
+}
 
 .pulso {
   position: absolute;
@@ -314,13 +424,20 @@
   animation: nubexPulsar 3.4s ease-out infinite;
   pointer-events: none;
 }
-.pulsoB { animation-delay: 1.7s; }
-
-@keyframes nubexPulsar {
-  from { scale: 1;   opacity: 0.7; }
-  to   { scale: 2.2; opacity: 0; }
+.pulsoB {
+  animation-delay: 1.7s;
 }
 
+@keyframes nubexPulsar {
+  from {
+    scale: 1;
+    opacity: 0.7;
+  }
+  to {
+    scale: 2.2;
+    opacity: 0;
+  }
+}
 
 .rodape {
   text-align: center;
@@ -337,15 +454,34 @@
   color: var(--cor-acao);
   font-weight: 600;
 }
-.rodape button:hover { text-decoration: underline; }
+.rodape button:hover {
+  text-decoration: underline;
+}
 
 @media (max-width: 760px) {
-  .parceiro { width: 62px; height: 62px; }
-  .anelInterno .parceiro { width: 52px; height: 52px; }
-  .centro, .pulso { width: 22%; }
-  .nomeParceiro { display: none; }
+  .parceiro {
+    width: 62px;
+    height: 62px;
+  }
+  .anelInterno .parceiro {
+    width: 52px;
+    height: 52px;
+  }
+  .centro,
+  .pulso {
+    width: 22%;
+  }
+  .nomeParceiro {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .anel, .contra, .pulso, .centro::before, .aro { animation: none; }
+  .anel,
+  .contra,
+  .pulso,
+  .centro::before,
+  .aro {
+    animation: none;
+  }
 }

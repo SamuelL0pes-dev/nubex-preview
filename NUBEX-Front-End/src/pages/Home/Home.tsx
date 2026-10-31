@@ -4,6 +4,7 @@ import AnimatedCounters from "../../components/features/AnimatedCounters";
 import HeroBanner from "../../components/features/HeroBanner";
 import Partners from "../../components/features/Partners";
 import QuickAccessCards from "../../components/features/QuickAccessCards";
+import NewsBoard from "../../components/features/NewsBoard";
 
 export default function Home() {
   const navegar = useNavigate();
@@ -19,6 +20,7 @@ export default function Home() {
       <QuickAccessCards />
       <AnimatedCounters />
       <Partners onSelecionar={abrirParceiros} />
+      <NewsBoard />
     </>
   );
 }

@@ -1,0 +1,381 @@
+.secao {
+  position: relative;
+  background: #ffffff;
+}
+
+.transicao {
+  position: relative;
+  height: 118px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.transicao svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.corpoDaSecao {
+  position: relative;
+  overflow: hidden;
+  padding: 76px 0 88px;
+  background: linear-gradient(
+    180deg,
+    var(--faixa-corte) 0%,
+    var(--faixa-corte) 56%,
+    #ffffff 100%
+  );
+}
+
+.corpoDaSecao::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    /* membranas com miolo */
+    radial-gradient(
+      circle at 57% 5%,
+      rgba(0, 74, 247, 0.05) 0 20px,
+      rgba(0, 74, 247, 0.15) 20px 21.4px,
+      transparent 22px
+    ),
+    radial-gradient(
+      circle at 63% 9%,
+      rgba(0, 179, 122, 0.055) 0 27px,
+      rgba(0, 179, 122, 0.16) 27px 28.4px,
+      transparent 29px
+    ),
+    radial-gradient(
+      circle at 70% 20%,
+      rgba(0, 74, 247, 0.05) 0 32px,
+      rgba(0, 74, 247, 0.14) 32px 33.4px,
+      transparent 34px
+    ),
+    radial-gradient(
+      circle at 76% 6%,
+      rgba(0, 179, 122, 0.06) 0 17px,
+      rgba(0, 179, 122, 0.17) 17px 18.4px,
+      transparent 19px
+    ),
+    radial-gradient(
+      circle at 81% 26%,
+      rgba(0, 74, 247, 0.05) 0 38px,
+      rgba(0, 74, 247, 0.14) 38px 39.4px,
+      transparent 40px
+    ),
+    radial-gradient(
+      circle at 86% 10%,
+      rgba(0, 179, 122, 0.055) 0 25px,
+      rgba(0, 179, 122, 0.16) 25px 26.4px,
+      transparent 27px
+    ),
+    radial-gradient(
+      circle at 92% 31%,
+      rgba(0, 74, 247, 0.05) 0 29px,
+      rgba(0, 74, 247, 0.15) 29px 30.4px,
+      transparent 31px
+    ),
+    radial-gradient(
+      circle at 95% 15%,
+      rgba(0, 179, 122, 0.06) 0 24px,
+      rgba(0, 179, 122, 0.17) 24px 25.4px,
+      transparent 26px
+    ),
+    radial-gradient(
+      circle at 99% 6%,
+      rgba(0, 74, 247, 0.055) 0 22px,
+      rgba(0, 74, 247, 0.15) 22px 23.4px,
+      transparent 24px
+    ),
+    radial-gradient(
+      circle at 67% 33%,
+      rgba(0, 179, 122, 0.05) 0 16px,
+      rgba(0, 179, 122, 0.16) 16px 17.4px,
+      transparent 18px
+    ),
+    radial-gradient(
+      circle at 78% 38%,
+      rgba(0, 74, 247, 0.045) 0 23px,
+      rgba(0, 74, 247, 0.14) 23px 24.4px,
+      transparent 25px
+    ),
+    /* membranas vazias */
+    radial-gradient(
+        circle at 8% 22%,
+        transparent 0 33px,
+        rgba(0, 74, 247, 0.13) 33px 34.4px,
+        transparent 35px
+      ),
+    radial-gradient(
+      circle at 23% 13%,
+      transparent 0 21px,
+      rgba(0, 179, 122, 0.15) 21px 22.4px,
+      transparent 23px
+    ),
+    radial-gradient(
+      circle at 44% 30%,
+      transparent 0 47px,
+      rgba(0, 74, 247, 0.1) 47px 48.4px,
+      transparent 49px
+    ),
+    radial-gradient(
+      circle at 16% 58%,
+      transparent 0 30px,
+      rgba(0, 179, 122, 0.12) 30px 31.4px,
+      transparent 32px
+    ),
+    radial-gradient(
+      circle at 55% 66%,
+      transparent 0 41px,
+      rgba(0, 74, 247, 0.11) 41px 42.4px,
+      transparent 43px
+    ),
+    radial-gradient(
+      circle at 88% 61%,
+      transparent 0 25px,
+      rgba(0, 179, 122, 0.13) 25px 26.4px,
+      transparent 27px
+    ),
+    radial-gradient(
+      circle at 35% 94%,
+      transparent 0 36px,
+      rgba(0, 74, 247, 0.12) 36px 37.4px,
+      transparent 38px
+    ),
+    radial-gradient(
+      circle at 70% 88%,
+      transparent 0 29px,
+      rgba(0, 179, 122, 0.14) 29px 30.4px,
+      transparent 31px
+    ),
+    /* corpos cheios */
+    radial-gradient(
+        circle at 4% 44%,
+        rgba(0, 74, 247, 0.065) 0 44px,
+        transparent 45px
+      ),
+    radial-gradient(
+      circle at 30% 50%,
+      rgba(0, 179, 122, 0.055) 0 28px,
+      transparent 29px
+    ),
+    radial-gradient(
+      circle at 50% 18%,
+      rgba(0, 179, 122, 0.05) 0 20px,
+      transparent 21px
+    ),
+    radial-gradient(
+      circle at 72% 46%,
+      rgba(0, 74, 247, 0.06) 0 34px,
+      transparent 35px
+    ),
+    radial-gradient(
+      circle at 97% 48%,
+      rgba(0, 179, 122, 0.06) 0 52px,
+      transparent 53px
+    ),
+    radial-gradient(
+      circle at 12% 84%,
+      rgba(0, 179, 122, 0.085) 0 38px,
+      transparent 39px
+    ),
+    radial-gradient(
+      circle at 21% 97%,
+      rgba(0, 74, 247, 0.075) 0 56px,
+      transparent 57px
+    ),
+    radial-gradient(
+      circle at 44% 82%,
+      rgba(0, 179, 122, 0.065) 0 26px,
+      transparent 27px
+    ),
+    radial-gradient(
+      circle at 60% 98%,
+      rgba(0, 74, 247, 0.07) 0 43px,
+      transparent 44px
+    ),
+    radial-gradient(
+      circle at 79% 93%,
+      rgba(0, 74, 247, 0.08) 0 48px,
+      transparent 49px
+    ),
+    radial-gradient(
+      circle at 92% 80%,
+      rgba(0, 179, 122, 0.075) 0 32px,
+      transparent 33px
+    ),
+    radial-gradient(
+      circle at 99% 99%,
+      rgba(0, 74, 247, 0.065) 0 62px,
+      transparent 63px
+    );
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 64% at 50% 56%,
+    transparent 24%,
+    rgba(0, 0, 0, 0.5) 60%,
+    #000 90%
+  );
+  mask-image: radial-gradient(
+    ellipse 80% 64% at 50% 56%,
+    transparent 24%,
+    rgba(0, 0, 0, 0.5) 60%,
+    #000 90%
+  );
+}
+
+.interno {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.topo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px 32px;
+  padding-bottom: 22px;
+  margin-bottom: 44px;
+  border-bottom: 3px solid #1d2433;
+}
+
+.cabeca {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.selo {
+  display: inline-block;
+  margin: 0 0 14px;
+  padding: 8px 16px;
+  background: var(--cor-realce);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--cor-acao);
+}
+
+.titulo {
+  margin: 0;
+  font-size: clamp(30px, 4vw, 42px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.4px;
+  text-transform: uppercase;
+  color: #1d2433;
+}
+
+.subtitulo {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: end;
+  max-width: 58ch;
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--cor-texto-suave);
+}
+
+.verTodos {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: end;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 46px;
+  padding: 0 24px;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #ffffff;
+  background: var(--cor-acao);
+  border: 1px solid var(--cor-acao);
+  text-decoration: none;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    gap 0.2s ease;
+}
+
+.verTodos svg {
+  width: 15px;
+  height: 15px;
+}
+
+.verTodos:hover {
+  background: var(--cor-acao-hover);
+  border-color: var(--cor-acao-hover);
+  gap: 15px;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 56px;
+  row-gap: 40px;
+}
+
+.aviso {
+  margin: 0;
+  color: var(--cor-texto-suave);
+}
+
+.esqueleto {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.esqueletoCapa {
+  aspect-ratio: 16 / 9;
+  background: var(--cor-superficie);
+}
+
+.esqueletoLinha,
+.esqueletoLinhaCurta {
+  height: 14px;
+  background: var(--cor-superficie);
+}
+
+.esqueletoLinhaCurta {
+  width: 60%;
+}
+
+@media (max-width: 900px) {
+  .topo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .verTodos {
+    grid-column: 1;
+    grid-row: 3;
+    justify-self: start;
+  }
+
+  .grade {
+    grid-template-columns: 1fr;
+    row-gap: 36px;
+  }
+}
+
+@media (max-width: 560px) {
+  .transicao {
+    height: 72px;
+  }
+
+  .corpoDaSecao {
+    padding: 52px 0 56px;
+  }
+
+  .interno {
+    padding: 0 18px;
+  }
+}

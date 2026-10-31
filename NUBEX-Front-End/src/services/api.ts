@@ -12,6 +12,7 @@ const ONDE_MORA: Record<string, Servico> = {
   avisos: "conteudo",
   noticias: "conteudo",
   parceiros: "conteudo",
+  editais: "conteudo",
   faq: "conteudo",
   pesquisadores: "conteudo",
   contato: "conteudo",
@@ -57,7 +58,7 @@ export class ErroDaApi extends Error {
 
 // "/avisos" -> "http://localhost:8080/api/avisos"
 function enderecoDe(caminho: string): string {
-  const recurso = caminho.replace(/^\//, "").split("/")[0];
+  const recurso = caminho.replace(/^\//, "").split(/[/?]/)[0];
   const servico = ONDE_MORA[recurso];
 
   if (!servico) {
