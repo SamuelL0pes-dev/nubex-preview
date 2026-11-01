@@ -10,24 +10,25 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  transition: transform 0.25s ease;
+  /* Aceleração por GPU para 60 FPS suaves no hover */
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  will-change: transform;
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1);
 }
 
 .cartao:hover {
-  transform: translateY(-5px);
+  transform: translate3d(0, -6px, 0);
 }
 
 @keyframes subir {
   from {
     opacity: 0;
-    transform: translateY(48px);
-  }
-  60% {
-    opacity: 1;
+    transform: translate3d(0, 36px, 0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -36,7 +37,8 @@
 }
 
 .entrando {
-  animation: subir 1.15s cubic-bezier(0.17, 0.72, 0.21, 1) backwards;
+  will-change: transform, opacity;
+  animation: subir 0.65s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 
 .cartao + .cartao::after {
@@ -56,17 +58,24 @@
   max-width: 100%;
   overflow: hidden;
   background: var(--cor-superficie);
+  border-radius: 8px;
+  /* Previne cintilação ao redimensionar */
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .capa img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.45s ease;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  backface-visibility: hidden;
+  transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1);
 }
 
 .cartao:hover .capa img {
-  transform: scale(1.07);
+  transform: scale3d(1.06, 1.06, 1);
 }
 
 .semFoto {
@@ -95,11 +104,14 @@
   width: 66px;
   height: 66px;
   opacity: 0.42;
-  transition: transform 0.45s ease;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  backface-visibility: hidden;
+  transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1);
 }
 
 .cartao:hover .semFoto svg {
-  transform: scale(1.08);
+  transform: scale3d(1.08, 1.08, 1);
 }
 
 .etiqueta {
@@ -113,11 +125,14 @@
   letter-spacing: 1.1px;
   text-transform: uppercase;
   color: #ffffff;
-  transition: padding-right 0.25s ease;
+  border-radius: 4px 0 6px 0;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  transition: transform 0.25s ease;
 }
 
 .cartao:hover .etiqueta {
-  padding-right: 18px;
+  transform: translate3d(2px, 0, 0);
 }
 
 [data-categoria="noticia"] .semFoto {
@@ -169,6 +184,7 @@
   text-transform: uppercase;
   color: var(--tarja-edital);
   border: 1px solid var(--tarja-edital);
+  border-radius: 4px;
 }
 
 .prazo[data-urgente="sim"] {
@@ -205,7 +221,7 @@
 .titulo a {
   color: inherit;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color 0.18s ease;
 }
 
 .cartao:hover .titulo a {
@@ -238,23 +254,30 @@
   color: var(--cor-acao);
   background: #ffffff;
   border: 1px solid #c9d4e8;
+  border-radius: 8px;
   text-decoration: none;
   transition:
     border-color 0.2s ease,
-    background 0.2s ease,
-    gap 0.2s ease;
+    background-color 0.2s ease;
 }
 
 .leia svg {
   width: 16px;
   height: 16px;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  transition: transform 0.2s ease;
 }
 
 .cartao:hover .leia,
 .leia:hover {
   border-color: var(--cor-acao);
-  background: #f2f6ff;
-  gap: 14px;
+  background-color: #f2f6ff;
+}
+
+.cartao:hover .leia svg,
+.leia:hover svg {
+  transform: translate3d(4px, 0, 0);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -262,13 +285,16 @@
   .capa img,
   .semFoto svg,
   .leia,
+  .leia svg,
   .etiqueta {
     transition: none;
   }
 
   .cartao:hover,
   .cartao:hover .capa img,
-  .cartao:hover .semFoto svg {
+  .cartao:hover .semFoto svg,
+  .cartao:hover .etiqueta,
+  .cartao:hover .leia svg {
     transform: none;
   }
 
