@@ -46,6 +46,15 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     boolean existsByCnpj(String cnpj);
 
+    // ---- Seed do administrador inicial (RF074) ----
+
+    /**
+     * Usado pelo BootstrapAdministradorInicial para não criar um segundo
+     * administrador a cada subida da aplicação. É o que torna o seed
+     * idempotente.
+     */
+    boolean existsByPerfil(PerfilUsuario perfil);
+
     // ---- Painel administrativo (RF074) ----
 
     /** Lista por perfil e status, paginada: a lista de usuários cresce sem limite. */

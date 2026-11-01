@@ -94,6 +94,12 @@ services:
       DB_PASSWORD: ${POSTGRES_PASSWORD:?Preencha POSTGRES_PASSWORD no arquivo .env}
       SERVER_PORT: 8080
       SPRING_PROFILES_ACTIVE: dev
+      # Primeira conta de administrador (RF074). Opcionais de propósito: com o
+      # ":-" o compose sobe sem elas, e o job do CI não precisa definir nada.
+      # Sem administrador, ninguém aprova solicitante (RF052).
+      NUBEX_ADMIN_EMAIL: ${NUBEX_ADMIN_EMAIL:-}
+      NUBEX_ADMIN_SENHA: ${NUBEX_ADMIN_SENHA:-}
+      NUBEX_ADMIN_NOME: ${NUBEX_ADMIN_NOME:-}
     ports:
       - "127.0.0.1:${USUARIO_PORT:-8081}:8080"
     depends_on:

@@ -31,6 +31,14 @@ cp .env.example .env
 Abra `.env` e preencha `POSTGRES_PASSWORD` com uma senha local não vazia. O arquivo
 `.env` é ignorado pelo Git. Nunca inclua a senha no código nem no PR.
 
+No mesmo `.env`, preencha `NUBEX_ADMIN_EMAIL` e `NUBEX_ADMIN_SENHA` para que o
+`usuario-service` crie a primeira conta de administrador ao subir. A senha precisa
+ter de 8 a 36 caracteres, e `NUBEX_ADMIN_NOME` é opcional. Sem administrador
+ninguém aprova pedido de acesso de solicitante, e o painel administrativo não tem
+como ser acessado. O seed não cria um segundo administrador: se já existe um no
+banco, deixe as duas variáveis em branco. Cada pessoa tem o próprio banco local,
+então cada uma define a própria senha — não é preciso compartilhar.
+
 ```sh
 docker compose config --quiet
 docker compose up --build --detach --wait --wait-timeout 240
@@ -108,6 +116,11 @@ configure `DB_URL`, `DB_USER` e `DB_PASSWORD` no terminal ou no arquivo local
 `application-dev.properties`, usando os exemplos de cada serviço. O endereço
 local do banco usa a porta publicada, normalmente 5433. Não envie configurações
 locais com senhas ao GitHub. Evite executar duas instâncias na mesma porta.
+
+Rodando assim, o `.env` não é lido: ele só vale para o Compose. Para o
+`usuario-service` criar a primeira conta de administrador fora do Docker, preencha
+`nubex.admin.email` e `nubex.admin.senha` no `application-dev.properties` dele, como
+mostra o `application-dev.properties.example`.
 
 ## Rodar o frontend
 

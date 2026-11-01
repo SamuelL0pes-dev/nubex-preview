@@ -4,3 +4,16 @@
 spring.datasource.url=jdbc:postgresql://localhost:5433/usuario
 spring.datasource.username=nubex
 spring.datasource.password=defina-a-mesma-senha-do-env
+
+# Primeira conta de ADMINISTRADOR, criada na subida da aplicacao (RF074).
+# Estas linhas valem para quem roda o servico FORA do Docker: o .env da raiz so e
+# lido pelo Compose. Sem administrador, ninguem aprova pedido de acesso de
+# solicitante (RF052) e, por consequencia, ninguem se cadastra como participante.
+#
+# A senha precisa ter de 8 a 36 caracteres. Deixe as duas em branco se o
+# administrador ja existe no banco: o seed nao cria um segundo.
+nubex.admin.email=
+nubex.admin.senha=
+
+# Opcional. Em branco, o nome fica "Administrador NUBEX".
+nubex.admin.nome=
