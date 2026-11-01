@@ -20,7 +20,11 @@ const ROTAS_NOMES: Record<string, string> = {
   "parceiros": "Parceiros",
   "projetos": "Projetos de Pesquisa",
   "noticias": "Notícias e Editais",
-  "login": "Acessar Portal"
+  "login": "Acessar Portal",
+  "solicitar-acesso": "Solicitar Acesso (Docente)",
+  "pendente": "Pedido Pendente",
+  "cadastro": "Cadastro",
+  "solicitante": "Solicitante Interno"
 };
 
 export default function Breadcrumb() {

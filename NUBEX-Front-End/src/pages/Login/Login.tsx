@@ -14,6 +14,8 @@ export default function Login() {
   const [senha, setSenha] = useState("");
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [recuperacaoMatricula, setRecuperacaoMatricula] = useState("");
+  const [mensagemErro, setMensagemErro] = useState<string | null>(null);
+  const [erroEhPendente, setErroEhPendente] = useState(false);
 function togglePanel(goToForgot: boolean) {
   if (isAnimating) return; // Já está animando? Ignora o clique.
 
@@ -26,6 +28,16 @@ function togglePanel(goToForgot: boolean) {
   // Submissão do Login
   function handleLogin(e: FormEvent) {
     e.preventDefault();
+    setMensagemErro(null);
+    setErroEhPendente(false);
+
+    // Se estiver testando com conta pendente ou simulação
+    if (matricula.toLowerCase().includes("pendente") || matricula.toLowerCase().includes("aguarda")) {
+      setMensagemErro("Seu cadastro como solicitante ainda aguarda aprovação pelo administrador.");
+      setErroEhPendente(true);
+      return;
+    }
+
     console.log("Tentativa de login:", { matricula, senha });
     // Aqui conectaremos a autenticação com a API futuramente
   }
@@ -109,6 +121,22 @@ function togglePanel(goToForgot: boolean) {
               Entre com suas credenciais do Unifor Online / NUBEX
             </p>
 
+            {mensagemErro && (
+              <div
+                className={`${styles.alertaLogin} ${
+                  erroEhPendente ? styles.alertaLoginPendente : ""
+                }`}
+                role="alert"
+              >
+                <span>{mensagemErro}</span>
+                {erroEhPendente && (
+                  <Link to="/solicitar-acesso/pendente" className={styles.linkVerPedido}>
+                    Acompanhar pedido pendente →
+                  </Link>
+                )}
+              </div>
+            )}
+
             <div className={styles.inputGroup}>
               <label htmlFor="login-matricula">Matrícula ou E-mail</label>
               <input
@@ -154,6 +182,13 @@ function togglePanel(goToForgot: boolean) {
             <button type="submit" className={styles.btnPrimary}>
               Entrar no Portal
             </button>
+
+            <div className={styles.chamadaSolicitante}>
+              <span>É docente ou pesquisador da Unifor?</span>
+              <Link to="/solicitar-acesso" className={styles.linkSolicitante}>
+                Solicite acesso como Solicitante
+              </Link>
+            </div>
           </form>
         </div>
 

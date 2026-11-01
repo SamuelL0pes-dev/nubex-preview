@@ -19,6 +19,8 @@ import Parceiros from "./pages/Parceiros/Parceiros";
 import Projetos from "./pages/Projetos/Projetos";
 import Noticias from "./pages/Noticias/Noticias";
 import Login from "./pages/Login/Login";
+import CadastroSolicitante from "./pages/CadastroSolicitante/CadastroSolicitante";
+import PedidoPendente from "./pages/CadastroSolicitante/PedidoPendente";
 import NotFound from "./pages/NotFound/NotFound";
 
 export default function App() {
@@ -48,6 +50,9 @@ export default function App() {
           <Route path="/projetos" element={<Projetos />} />
           <Route path="/noticias" element={<Noticias />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/solicitar-acesso" element={<CadastroSolicitante />} />
+          <Route path="/solicitar-acesso/pendente" element={<PedidoPendente />} />
+          <Route path="/cadastro/solicitante" element={<CadastroSolicitante />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
