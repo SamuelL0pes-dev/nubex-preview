@@ -60,3 +60,32 @@ export interface PedidoPendenteInfo {
   status: StatusUsuario;
   motivoRecusa?: string;
 }
+
+/**
+ * Dados para efetuar login (POST /api/auth/login).
+ * O identificador aceita e-mail institucional ou matrícula.
+ */
+export interface LoginRequisicao {
+  identificador: string;
+  senha: string;
+}
+
+/**
+ * Resumo do usuário autenticado retornado na resposta do login.
+ */
+export interface UsuarioLogadoInfo {
+  id: number;
+  nome: string;
+  perfil: PerfilUsuario;
+  tipo: TipoUsuario;
+}
+
+/**
+ * Resposta de autenticação retornada pelo usuario-service (RF073).
+ */
+export interface LoginResposta {
+  token: string;
+  tipoDeToken: string;
+  expiraEmSegundos: number;
+  usuario: UsuarioLogadoInfo;
+}

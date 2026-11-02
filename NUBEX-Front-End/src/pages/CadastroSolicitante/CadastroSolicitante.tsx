@@ -1,6 +1,7 @@
 import { useState, type FormEvent, type ChangeEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./CadastroSolicitante.module.css";
+import { ErroDaApi } from "../../services/api";
 import { enviarSolicitacaoAcesso } from "../../services/solicitante";
 import type { SolicitacaoSolicitanteInput } from "../../types/usuario";
 
@@ -140,6 +141,26 @@ export default function CadastroSolicitante() {
       navigate("/solicitar-acesso/pendente");
     } catch (erro: unknown) {
       console.error("Erro ao enviar solicitação:", erro);
+
+      if (erro instanceof ErroDaApi) {
+        // Validação com campos retornados pelo backend (400)
+        if (erro.campos && erro.campos.length > 0) {
+          const novosErros: Record<string, string> = {};
+          for (const c of erro.campos) {
+            novosErros[c.campo] = c.mensagem;
+          }
+          setErrosCampos((prev) => ({ ...prev, ...novosErros }));
+        }
+
+        // Conflito de conta existente (409)
+        if (erro.status === 409) {
+          setErrosCampos((prev) => ({
+            ...prev,
+            email: erro.message,
+          }));
+        }
+      }
+
       setErroGeral(
         erro instanceof Error
           ? erro.message

@@ -98,9 +98,9 @@ export async function enviarSolicitacaoAcesso(
   };
 
   try {
-    // Tenta registrar na API real do backend
+    // Tenta registrar na API real do backend (usuario-service /cadastro/solicitante - RF052)
     const resposta = await api.post<Partial<PedidoPendenteInfo>>(
-      "/usuarios/solicitacoes",
+      "/cadastro/solicitante",
       payloadBack,
     );
 

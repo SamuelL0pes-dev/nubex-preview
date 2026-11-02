@@ -2,6 +2,8 @@ import { render, screen, fireEvent, cleanup, waitFor } from "@testing-library/re
 import { MemoryRouter } from "react-router-dom";
 import { describe, it, expect, afterEach, vi } from "vitest";
 import CadastroSolicitante from "./CadastroSolicitante";
+import { ErroDaApi } from "../../services/api";
+import * as solicitanteService from "../../services/solicitante";
 
 const mockNavigate = vi.fn();
 vi.mock("react-router-dom", async () => {
@@ -153,5 +155,100 @@ describe("CadastroSolicitante (RF052)", () => {
     await waitFor(() => {
       expect(mockNavigate).toHaveBeenCalledWith("/solicitar-acesso/pendente");
     });
+  });
+
+  it("exibe mensagem de erro na tela quando o backend retorna 409 (e-mail ja cadastrado)", async () => {
+    vi.spyOn(solicitanteService, "enviarSolicitacaoAcesso").mockRejectedValueOnce(
+      new ErroDaApi(409, "Já existe uma conta com este e-mail"),
+    );
+
+    renderizar();
+
+    fireEvent.change(screen.getByLabelText(/nome completo/i), {
+      target: { value: "Prof. Dr. Samuel Lopes" },
+    });
+    fireEvent.change(screen.getByLabelText(/e-mail institucional unifor/i), {
+      target: { value: "samuel.lopes@unifor.br" },
+    });
+    fireEvent.change(screen.getByLabelText(/telefone \/ celular/i), {
+      target: { value: "85999998888" },
+    });
+    fireEvent.change(screen.getByLabelText(/link do currículo lattes/i), {
+      target: { value: "http://lattes.cnpq.br/1234567890123456" },
+    });
+    fireEvent.change(screen.getByLabelText(/^senha de acesso/i), {
+      target: { value: "SenhaForte@123" },
+    });
+    fireEvent.change(screen.getByLabelText(/confirmar senha/i), {
+      target: { value: "SenhaForte@123" },
+    });
+
+    const checkboxTermos = screen.getByRole("checkbox");
+    fireEvent.click(checkboxTermos);
+
+    const botaoEnviar = screen.getByRole("button", {
+      name: /submeter solicitação de acesso/i,
+    });
+    fireEvent.click(botaoEnviar);
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByText(/já existe uma conta com este e-mail/i).length,
+      ).toBeGreaterThanOrEqual(1);
+    });
+
+    // Garante que não redirecionou para tela de pendente
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  it("exibe erros de validacao por campo quando o backend retorna 400 com array de campos", async () => {
+    vi.spyOn(solicitanteService, "enviarSolicitacaoAcesso").mockRejectedValueOnce(
+      new ErroDaApi(400, "Dados inválidos", undefined, [
+        {
+          campo: "lattesUrl",
+          mensagem:
+            "Endereço do Lattes inválido. Exemplo: http://lattes.cnpq.br/0000000000000000",
+        },
+      ]),
+    );
+
+    renderizar();
+
+    fireEvent.change(screen.getByLabelText(/nome completo/i), {
+      target: { value: "Prof. Dr. Samuel Lopes" },
+    });
+    fireEvent.change(screen.getByLabelText(/e-mail institucional unifor/i), {
+      target: { value: "samuel.lopes@unifor.br" },
+    });
+    fireEvent.change(screen.getByLabelText(/telefone \/ celular/i), {
+      target: { value: "85999998888" },
+    });
+    fireEvent.change(screen.getByLabelText(/link do currículo lattes/i), {
+      target: { value: "http://lattes.cnpq.br/1234567890123456" },
+    });
+    fireEvent.change(screen.getByLabelText(/^senha de acesso/i), {
+      target: { value: "SenhaForte@123" },
+    });
+    fireEvent.change(screen.getByLabelText(/confirmar senha/i), {
+      target: { value: "SenhaForte@123" },
+    });
+
+    const checkboxTermos = screen.getByRole("checkbox");
+    fireEvent.click(checkboxTermos);
+
+    const botaoEnviar = screen.getByRole("button", {
+      name: /submeter solicitação de acesso/i,
+    });
+    fireEvent.click(botaoEnviar);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          "Endereço do Lattes inválido. Exemplo: http://lattes.cnpq.br/0000000000000000",
+        ),
+      ).toBeInTheDocument();
+    });
+
+    expect(mockNavigate).not.toHaveBeenCalled();
   });
 });
