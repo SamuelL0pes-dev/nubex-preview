@@ -334,19 +334,61 @@
   gap: 12px;
 }
 
+@keyframes shimmerGPU {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.esqueletoCapa,
+.esqueletoLinha,
+.esqueletoLinhaCurta {
+  position: relative;
+  overflow: hidden;
+  background-color: #eaebf0;
+  border-radius: 8px;
+}
+
+.esqueletoCapa::after,
+.esqueletoLinha::after,
+.esqueletoLinhaCurta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.65) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmerGPU 1.4s ease-in-out infinite;
+  will-change: transform;
+}
+
 .esqueletoCapa {
   aspect-ratio: 16 / 9;
-  background: var(--cor-superficie);
 }
 
 .esqueletoLinha,
 .esqueletoLinhaCurta {
   height: 14px;
-  background: var(--cor-superficie);
 }
 
 .esqueletoLinhaCurta {
   width: 60%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .esqueletoCapa::after,
+  .esqueletoLinha::after,
+  .esqueletoLinhaCurta::after {
+    animation: none;
+    display: none;
+  }
 }
 
 @media (max-width: 900px) {
