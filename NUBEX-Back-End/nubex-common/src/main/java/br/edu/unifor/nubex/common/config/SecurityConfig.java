@@ -14,14 +14,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
- * Esqueleto do Spring Security (RNF013). Nesta semana (S1) ele só define as
- * regras gerais; o login e a verificação de token entram na S2.
+ * Segurança compartilhada pelos cinco serviços (RNF013, RF073).
  *
  * Regras:
  *  - API sem estado (sem sessão): cada requisição precisa trazer o próprio token;
@@ -29,14 +29,16 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  *    depende de cookie enviado automaticamente pelo navegador);
  *  - tudo exige autenticação, exceto /actuator/health, o Swagger (quando ligado) e as
  *    rotas listadas em nubex.security.public-routes por cada serviço;
+ *  - o token é conferido aqui mesmo, em cada serviço, pelo JwtDecoder que o
+ *    ConferenciaDeTokenConfig monta a partir da chave pública;
  *  - 401 e 403 saem em JSON, no mesmo formato dos outros erros.
  *
- * Todos os beans abaixo usam @ConditionalOnMissingBean: se um serviço definir o próprio
- * (por exemplo, o usuario-service com o login real na S2), o do módulo comum sai de cena
- * em vez de dar conflito.
+ * Todos os beans abaixo usam @ConditionalOnMissingBean: se um serviço definir o próprio,
+ * o do módulo comum sai de cena em vez de dar conflito.
  *
- * A permissão por perfil em cada rota (RNF013) virá com @PreAuthorize, que já
- * está habilitado por causa do @EnableMethodSecurity.
+ * A permissão por perfil em cada rota (RNF013) se escreve com @PreAuthorize, que
+ * está habilitado por causa do @EnableMethodSecurity. As autoridades que ele
+ * compara vêm dos campos do token, traduzidas no ConferenciaDeTokenConfig.
  */
 @Configuration
 @EnableWebSecurity
@@ -51,6 +53,7 @@ public class SecurityConfig {
             ApiAuthenticationEntryPoint entryPoint,
             ApiAccessDeniedHandler accessDeniedHandler,
             NubexSecurityProperties securityProperties,
+            JwtAuthenticationConverter conversorDeToken,
             @Value("${springdoc.swagger-ui.enabled:false}") boolean swaggerLigado) throws Exception {
 
         http
@@ -59,6 +62,26 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(basic -> basic.disable())
                 .formLogin(form -> form.disable())
+                /*
+                 * Liga o filtro que lê o cabeçalho "Authorization: Bearer <token>",
+                 * confere a assinatura com a chave pública e põe o usuário no
+                 * contexto. É o que faz o @PreAuthorize ter com quem comparar.
+                 */
+                .oauth2ResourceServer(recurso -> recurso
+                        /*
+                         * Estes dois repetem o que o exceptionHandling acima já
+                         * define, e precisam ser repetidos: sem eles, o Spring usa
+                         * o tratamento próprio dele quando o token é inválido, e
+                         * não o nosso. O resultado era 401 com corpo VAZIO e um
+                         * cabeçalho WWW-Authenticate descrevendo o erro interno
+                         * ("An error occurred while attempting to decode the Jwt:
+                         * Malformed token") -- o que quebra o formato único do
+                         * ApiError, que o front espera em toda resposta, e
+                         * contraria o include-message: never do nubex-common.yml.
+                         */
+                        .authenticationEntryPoint(entryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
+                        .jwt(token -> token.jwtAuthenticationConverter(conversorDeToken)))
                 .exceptionHandling(e -> e
                         .authenticationEntryPoint(entryPoint)
                         .accessDeniedHandler(accessDeniedHandler))
@@ -97,7 +120,7 @@ public class SecurityConfig {
         return source;
     }
 
-    /** Senhas só como hash BCrypt (usado no cadastro e no login, a partir da S2). */
+    /** Senhas só como hash BCrypt: usado para gravar no cadastro e conferir no login. */
     @Bean
     @ConditionalOnMissingBean(PasswordEncoder.class)
     PasswordEncoder passwordEncoder() {
@@ -105,9 +128,12 @@ public class SecurityConfig {
     }
 
     /**
-     * Provisório. Sem este bean, o Spring Boot cria um usuário "user" com senha
-     * aleatória e escreve essa senha no log, o que é exatamente o que queremos
-     * evitar. Este serviço sempre recusa, até o login real ser implementado (S2).
+     * Não participa do login por token, e continua aqui de propósito.
+     *
+     * O login confere a senha chamando o PasswordEncoder direto, sem passar por
+     * UserDetailsService. Mas, se este bean não existisse, o Spring Boot criaria
+     * um usuário "user" com senha aleatória e escreveria essa senha no log --
+     * exatamente o que queremos evitar. Ele existe para ocupar o lugar e recusar.
      */
     @Bean
     @ConditionalOnMissingBean(UserDetailsService.class)

@@ -20,9 +20,14 @@ import org.springframework.context.annotation.Import;
         "org.springframework.boot.security.autoconfigure.web.servlet.ServletWebSecurityAutoConfiguration"
 })
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-@EnableConfigurationProperties({CorsProperties.class, NubexSecurityProperties.class})
+@EnableConfigurationProperties({
+        CorsProperties.class,
+        NubexSecurityProperties.class,
+        NubexJwtProperties.class
+})
 @Import({
         SecurityConfig.class,
+        ConferenciaDeTokenConfig.class,
         ApiAuthenticationEntryPoint.class,
         ApiAccessDeniedHandler.class,
         OpenApiConfig.class,
