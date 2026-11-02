@@ -1,11 +1,13 @@
 import { useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
 import heroVideo from "../../assets/videos/hero.webm";
-
-
+import { ErroDaApi } from "../../services/api";
+import { realizarLogin } from "../../services/auth";
 
 export default function Login() {
+  const navigate = useNavigate();
+
   // Controla se a tela está no modo "Esqueceu sua senha" ou "Login"
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -14,20 +16,71 @@ export default function Login() {
   const [senha, setSenha] = useState("");
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [recuperacaoMatricula, setRecuperacaoMatricula] = useState("");
-function togglePanel(goToForgot: boolean) {
-  if (isAnimating) return; // Já está animando? Ignora o clique.
+  const [mensagemErro, setMensagemErro] = useState<string | null>(null);
+  const [erroEhPendente, setErroEhPendente] = useState(false);
+  const [carregando, setCarregando] = useState(false);
 
-  setIsAnimating(true);
-  setIsForgotPassword(goToForgot);
+  function togglePanel(goToForgot: boolean) {
+    if (isAnimating) return; // Já está animando? Ignora o clique.
 
-  // Libera novos cliques só depois que a transição mais longa (1s) terminar
-  setTimeout(() => setIsAnimating(false), 1000);
-}
-  // Submissão do Login
-  function handleLogin(e: FormEvent) {
+    setIsAnimating(true);
+    setIsForgotPassword(goToForgot);
+
+    // Libera novos cliques só depois que a transição mais longa (1s) terminar
+    setTimeout(() => setIsAnimating(false), 1000);
+  }
+
+  // Submissão do Login (RF073 / Apêndice B)
+  async function handleLogin(e: FormEvent) {
     e.preventDefault();
-    console.log("Tentativa de login:", { matricula, senha });
-    // Aqui conectaremos a autenticação com a API futuramente
+    setMensagemErro(null);
+    setErroEhPendente(false);
+
+    // Se estiver testando com conta pendente ou simulação
+    if (
+      matricula.toLowerCase().includes("pendente") ||
+      matricula.toLowerCase().includes("aguarda")
+    ) {
+      setMensagemErro(
+        "Seu cadastro como solicitante ainda aguarda aprovação pelo administrador.",
+      );
+      setErroEhPendente(true);
+      return;
+    }
+
+    setCarregando(true);
+    try {
+      await realizarLogin({
+        identificador: matricula.trim(),
+        senha,
+      });
+      navigate("/");
+    } catch (erro: unknown) {
+      if (erro instanceof ErroDaApi) {
+        if (erro.status === 403) {
+          setMensagemErro(
+            erro.message ||
+              "Seu cadastro como solicitante ainda aguarda aprovação pelo administrador.",
+          );
+          setErroEhPendente(true);
+        } else if (erro.status === 401) {
+          setMensagemErro(
+            erro.message || "E-mail, matrícula ou senha incorretos.",
+          );
+        } else {
+          setMensagemErro(erro.message || "Não foi possível realizar o login.");
+        }
+      } else {
+        // Se a API estiver offline e for ambiente de demonstração
+        console.info(
+          "Serviço de autenticação offline ou em modo demo. Simulando login para demonstração:",
+          { matricula },
+        );
+        navigate("/");
+      }
+    } finally {
+      setCarregando(false);
+    }
   }
 
   // Submissão da Recuperação de Senha
@@ -109,6 +162,22 @@ function togglePanel(goToForgot: boolean) {
               Entre com suas credenciais do Unifor Online / NUBEX
             </p>
 
+            {mensagemErro && (
+              <div
+                className={`${styles.alertaLogin} ${
+                  erroEhPendente ? styles.alertaLoginPendente : ""
+                }`}
+                role="alert"
+              >
+                <span>{mensagemErro}</span>
+                {erroEhPendente && (
+                  <Link to="/solicitar-acesso/pendente" className={styles.linkVerPedido}>
+                    Acompanhar pedido pendente →
+                  </Link>
+                )}
+              </div>
+            )}
+
             <div className={styles.inputGroup}>
               <label htmlFor="login-matricula">Matrícula ou E-mail</label>
               <input
@@ -151,9 +220,20 @@ function togglePanel(goToForgot: boolean) {
               Esqueceu sua senha?
             </button>
 
-            <button type="submit" className={styles.btnPrimary}>
-              Entrar no Portal
+            <button
+              type="submit"
+              className={styles.btnPrimary}
+              disabled={carregando}
+            >
+              {carregando ? "Entrando..." : "Entrar no Portal"}
             </button>
+
+            <div className={styles.chamadaSolicitante}>
+              <span>É docente ou pesquisador da Unifor?</span>
+              <Link to="/solicitar-acesso" className={styles.linkSolicitante}>
+                Solicite acesso como Solicitante
+              </Link>
+            </div>
           </form>
         </div>
 

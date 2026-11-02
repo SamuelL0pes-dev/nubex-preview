@@ -382,6 +382,61 @@
   transform: translateX(20%);
 }
 
+.chamadaSolicitante {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.82rem;
+  color: #64748b;
+  text-align: center;
+}
+
+.linkSolicitante {
+  color: #044cf4;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.linkSolicitante:hover {
+  text-decoration: underline;
+  color: #0336ae;
+}
+
+.alertaLogin {
+  background-color: #fee2e2;
+  border: 1px solid #f87171;
+  color: #991b1b;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  width: 100%;
+}
+
+.alertaLoginPendente {
+  background-color: #fef3c7;
+  border-color: #fcd34d;
+  color: #92400e;
+}
+
+.linkVerPedido {
+  font-weight: 700;
+  color: #b45309;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.linkVerPedido:hover {
+  color: #78350f;
+}
+
 /* ========================================================
        RESPONSIVIDADE (MOBILE)
     ======================================================== */
