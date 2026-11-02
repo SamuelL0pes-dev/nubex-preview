@@ -39,6 +39,27 @@ como ser acessado. O seed não cria um segundo administrador: se já existe um n
 banco, deixe as duas variáveis em branco. Cada pessoa tem o próprio banco local,
 então cada uma define a própria senha — não é preciso compartilhar.
 
+Preencha também `JWT_CHAVE_PRIVADA` e `JWT_CHAVE_PUBLICA`, o par que assina e
+confere o token de acesso. Gere o seu par **fora da pasta do repositório**, para não
+haver risco de commitar uma chave. No Windows, use o Git Bash, que já traz o
+`openssl`:
+
+```sh
+cd ~
+openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out privada.pem
+openssl rsa -in privada.pem -pubout -out publica.pem
+grep -v -- "-----" privada.pem | tr -d '\n'   # cole em JWT_CHAVE_PRIVADA
+grep -v -- "-----" publica.pem | tr -d '\n'   # cole em JWT_CHAVE_PUBLICA
+```
+
+Cada chave vai numa linha só, sem as linhas `-----BEGIN-----` e `-----END-----`.
+Apenas o `usuario-service` recebe a privada, porque é o único que faz login e,
+portanto, o único que precisa assinar; os outros quatro recebem só a pública, que
+confere a assinatura e não produz nenhuma. Cada pessoa gera o próprio par: o token
+emitido na sua máquina vale na sua máquina, e não é preciso compartilhar chave.
+Faltando as duas, a aplicação sobe normalmente, mas o login responde 503 e as rotas
+protegidas respondem 401.
+
 ```sh
 docker compose config --quiet
 docker compose up --build --detach --wait --wait-timeout 240

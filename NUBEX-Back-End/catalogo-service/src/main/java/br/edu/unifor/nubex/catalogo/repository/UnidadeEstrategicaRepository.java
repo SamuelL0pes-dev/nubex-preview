@@ -10,4 +10,5 @@ public interface UnidadeEstrategicaRepository extends JpaRepository<UnidadeEstra
 
     List<UnidadeEstrategica> findByAtivoTrueOrderByIdAsc();
     Optional<UnidadeEstrategica> findBySlugAndAtivoTrue(String slug);
+    Optional<UnidadeEstrategica> findByIdAndAtivoTrue(Long id);
 }

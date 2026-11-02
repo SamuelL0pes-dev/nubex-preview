@@ -50,4 +50,9 @@ public class UnidadeService {
 
         return mapper.toDetalhe(unidade, laboratorios, equipamentosPorLaboratorio);
     }
+
+    @Transactional(readOnly = true)
+    public UnidadeResumoResponse buscarPorId(Long id){
+        return unidadeRepository.findByIdAndAtivoTrue(id).map(mapper::toResumo).orElseThrow(() -> new RecursoNaoEncontradoException("Unidade não encontrada: " + id));
+    }
 }

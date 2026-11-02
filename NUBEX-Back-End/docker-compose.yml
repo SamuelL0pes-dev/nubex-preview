@@ -28,6 +28,11 @@ services:
       DB_PASSWORD: ${POSTGRES_PASSWORD:?Preencha POSTGRES_PASSWORD no arquivo .env}
       SERVER_PORT: 8080
       SPRING_PROFILES_ACTIVE: dev
+      # Chave pública que confere o token de acesso (RNF013). Vai nos cinco
+      # serviços porque os cinco conferem. Opcional de propósito: com o ":-" o
+      # compose sobe sem ela, e o job do CI não precisa definir nada. Sem chave,
+      # o serviço sobe e recusa todo token, deixando as rotas protegidas em 401.
+      JWT_CHAVE_PUBLICA: ${JWT_CHAVE_PUBLICA:-}
     ports:
       - "127.0.0.1:${AGENDAMENTO_PORT:-8082}:8080"
     depends_on:
@@ -50,6 +55,11 @@ services:
       DB_PASSWORD: ${POSTGRES_PASSWORD:?Preencha POSTGRES_PASSWORD no arquivo .env}
       SERVER_PORT: 8080
       SPRING_PROFILES_ACTIVE: dev
+      # Chave pública que confere o token de acesso (RNF013). Vai nos cinco
+      # serviços porque os cinco conferem. Opcional de propósito: com o ":-" o
+      # compose sobe sem ela, e o job do CI não precisa definir nada. Sem chave,
+      # o serviço sobe e recusa todo token, deixando as rotas protegidas em 401.
+      JWT_CHAVE_PUBLICA: ${JWT_CHAVE_PUBLICA:-}
     ports:
       - "127.0.0.1:${CATALOGO_PORT:-8083}:8080"
     depends_on:
@@ -72,6 +82,11 @@ services:
       DB_PASSWORD: ${POSTGRES_PASSWORD:?Preencha POSTGRES_PASSWORD no arquivo .env}
       SERVER_PORT: 8080
       SPRING_PROFILES_ACTIVE: dev
+      # Chave pública que confere o token de acesso (RNF013). Vai nos cinco
+      # serviços porque os cinco conferem. Opcional de propósito: com o ":-" o
+      # compose sobe sem ela, e o job do CI não precisa definir nada. Sem chave,
+      # o serviço sobe e recusa todo token, deixando as rotas protegidas em 401.
+      JWT_CHAVE_PUBLICA: ${JWT_CHAVE_PUBLICA:-}
     ports:
       - "127.0.0.1:${CONTEUDO_PORT:-8085}:8080"
     depends_on:
@@ -100,6 +115,14 @@ services:
       NUBEX_ADMIN_EMAIL: ${NUBEX_ADMIN_EMAIL:-}
       NUBEX_ADMIN_SENHA: ${NUBEX_ADMIN_SENHA:-}
       NUBEX_ADMIN_NOME: ${NUBEX_ADMIN_NOME:-}
+      # Chave pública que confere o token (RNF013), igual aos outros quatro.
+      JWT_CHAVE_PUBLICA: ${JWT_CHAVE_PUBLICA:-}
+      # E a privada, que ASSINA. Só aqui: este é o único serviço que faz login,
+      # logo o único que precisa assinar. Os outros quatro recebem apenas a
+      # pública, que confere e não produz assinatura -- então vazar a
+      # configuração de um deles não permite forjar token de administrador.
+      # Sem ela, o login responde 503 e a aplicação sobe normalmente.
+      JWT_CHAVE_PRIVADA: ${JWT_CHAVE_PRIVADA:-}
     ports:
       - "127.0.0.1:${USUARIO_PORT:-8081}:8080"
     depends_on:
@@ -122,6 +145,11 @@ services:
       DB_PASSWORD: ${POSTGRES_PASSWORD:?Preencha POSTGRES_PASSWORD no arquivo .env}
       SERVER_PORT: 8080
       SPRING_PROFILES_ACTIVE: dev
+      # Chave pública que confere o token de acesso (RNF013). Vai nos cinco
+      # serviços porque os cinco conferem. Opcional de propósito: com o ":-" o
+      # compose sobe sem ela, e o job do CI não precisa definir nada. Sem chave,
+      # o serviço sobe e recusa todo token, deixando as rotas protegidas em 401.
+      JWT_CHAVE_PUBLICA: ${JWT_CHAVE_PUBLICA:-}
     ports:
       - "127.0.0.1:${PROJETO_PORT:-8084}:8080"
     depends_on:

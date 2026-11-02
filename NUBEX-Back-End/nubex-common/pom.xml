@@ -23,6 +23,16 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
+    <!--
+      Confere o token em toda requisicao: traz o JwtDecoder, o filtro que le o
+      cabecalho Authorization e o Nimbus, que assina e verifica a assinatura RSA.
+      Nome novo do Boot 4, no padrao dos outros starters deste pom.
+      Sem <version>: o BOM do Boot 4.1.1 fixa.
+    -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security-oauth2-resource-server</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>

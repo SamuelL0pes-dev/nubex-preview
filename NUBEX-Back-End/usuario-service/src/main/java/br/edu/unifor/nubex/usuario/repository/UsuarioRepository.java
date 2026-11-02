@@ -17,7 +17,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
-    // ---- Login (RF086): e-mail para todos, matrícula para o discente ----
+    /*
+     * ---- Entrada no sistema: e-mail para todos, matrícula para o discente ----
+     *
+     * Servem ao login e à recuperação de senha. O RF086, da recuperação, é
+     * explícito: "informando a matrícula ou o e-mail do cadastro". O login aceita
+     * os dois pelo mesmo motivo, e decide pela arroba.
+     *
+     * Não há RF do login no documento -- o mais próximo é o RF087, que trata da
+     * sessão no portal, no front. É lacuna a levar à equipe, não esquecimento.
+     */
 
     /**
      * O IgnoreCase combina com o índice único sobre LOWER(email) da migração:

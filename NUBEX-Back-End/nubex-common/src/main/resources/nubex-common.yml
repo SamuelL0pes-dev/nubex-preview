@@ -30,6 +30,10 @@ nubex:
   cors:
     # Lista separada por vírgula. Vazio = nenhuma origem permitida.
     allowed-origins: ${CORS_ORIGINS:}
+  jwt:
+    # Chave pública que confere a assinatura do token, em base64 numa linha.
+    # Vazio = nenhum token é aceito e toda rota protegida responde 401.
+    chave-publica: ${JWT_CHAVE_PUBLICA:}
 
 ---
 spring:
@@ -62,6 +66,10 @@ nubex:
   cors:
     # Sem valor padrão de propósito: se a variável faltar, a aplicação não sobe.
     allowed-origins: ${CORS_ORIGINS}
+  jwt:
+    # Sem valor padrão de propósito: subir sem chave em produção seria subir
+    # com a autenticação quebrada.
+    chave-publica: ${JWT_CHAVE_PUBLICA}
 
 springdoc:
   api-docs:
