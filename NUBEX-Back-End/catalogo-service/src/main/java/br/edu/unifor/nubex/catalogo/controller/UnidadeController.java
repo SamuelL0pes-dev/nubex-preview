@@ -25,7 +25,12 @@ public class UnidadeController {
     }
 
     @GetMapping("/{slug}")
-    public UnidadeDetalheResponse buscar(@PathVariable String slug){
+    public UnidadeDetalheResponse buscar(@PathVariable("slug") String slug){
         return service.buscarPorSlug(slug);
+    }
+
+    @GetMapping("/{id}/resumo")
+    public UnidadeResumoResponse buscarPorId(@PathVariable("id") Long id){
+        return service.buscarPorId(id);
     }
 }
