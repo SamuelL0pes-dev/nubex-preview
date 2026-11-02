@@ -49,6 +49,24 @@ function IconeServico() {
   );
 }
 
+function IconeCadeado() {
+  return (
+    <svg
+      className={styles.icone}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+    </svg>
+  );
+}
+
 function IconeRecarregar() {
   return (
     <svg
@@ -102,18 +120,40 @@ export function EstadoSecao<T = unknown>({
   if (erro) {
     const tipo = tipoErro ?? identificarTipoErro(erro);
     const estaOffline = tipo === "sem_internet";
+    const ehSeguranca = tipo === "nao_autenticado" || tipo === "sem_permissao";
 
-    const titulo = estaOffline
-      ? "Sem conexão com a internet"
-      : "Serviço temporariamente indisponível";
+    let titulo = "Serviço temporariamente indisponível";
+    let descricaoPadrao = nomeSecao
+      ? `Não foi possível carregar ${nomeSecao}. O restante do portal continua funcionando normalmente.`
+      : "Não foi possível carregar estas informações no momento. O restante da página continua ativo.";
 
-    const descricao = estaOffline
-      ? (mensagemOffline ??
-        "Você parece estar offline. Verifique sua conexão com a rede e tente novamente.")
-      : (mensagemErro ??
-        (nomeSecao
-          ? `Não foi possível carregar ${nomeSecao}. O restante do portal continua funcionando normalmente.`
-          : "Não foi possível carregar estas informações no momento. O restante da página continua ativo."));
+    if (estaOffline) {
+      titulo = "Sem conexão com a internet";
+      descricaoPadrao =
+        mensagemOffline ??
+        "Você parece estar offline. Verifique sua conexão com a rede e tente novamente.";
+    } else if (tipo === "nao_autenticado") {
+      titulo = "Acesso não autenticado";
+      descricaoPadrao =
+        erro instanceof Error &&
+        erro.message &&
+        !erro.message.startsWith("O servidor respondeu")
+          ? erro.message
+          : "Faça login para ter acesso a este conteúdo.";
+    } else if (tipo === "sem_permissao") {
+      titulo = "Sem permissão de acesso";
+      descricaoPadrao =
+        erro instanceof Error &&
+        erro.message &&
+        !erro.message.startsWith("O servidor respondeu")
+          ? erro.message
+          : "Você não tem permissão para acessar este recurso.";
+    }
+
+    const descricao =
+      tipo === "sem_internet"
+        ? (mensagemOffline ?? descricaoPadrao)
+        : (mensagemErro ?? descricaoPadrao);
 
     return (
       <div
@@ -126,7 +166,13 @@ export function EstadoSecao<T = unknown>({
             estaOffline ? styles.iconeWrapperOffline : styles.iconeWrapper
           }
         >
-          {estaOffline ? <IconeOffline /> : <IconeServico />}
+          {estaOffline ? (
+            <IconeOffline />
+          ) : ehSeguranca ? (
+            <IconeCadeado />
+          ) : (
+            <IconeServico />
+          )}
         </div>
 
         <div className={styles.conteudoErro}>

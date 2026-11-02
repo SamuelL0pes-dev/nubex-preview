@@ -2,7 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 import { api, ErroDaApi } from "../services/api";
 
 export type TipoErroFetch =
-  "sem_internet" | "servico_indisponivel" | "erro_inesperado";
+  | "sem_internet"
+  | "servico_indisponivel"
+  | "nao_autenticado"
+  | "sem_permissao"
+  | "erro_inesperado";
 
 export interface EstadoFetch<T> {
   dado: T | null;
@@ -18,7 +22,13 @@ export function identificarTipoErro(erro: unknown): TipoErroFetch {
   }
 
   if (erro instanceof ErroDaApi) {
-    if (erro.status >= 500 || erro.status === 0 || erro.status === 503) {
+    if (erro.status === 401) {
+      return "nao_autenticado";
+    }
+    if (erro.status === 403) {
+      return "sem_permissao";
+    }
+    if (erro.status >= 500) {
       return "servico_indisponivel";
     }
     return "erro_inesperado";

@@ -96,6 +96,48 @@ describe("EstadoSecao", () => {
     ).toBeInTheDocument();
   });
 
+  it("renderiza erro de acesso não autenticado (401)", () => {
+    render(
+      <EstadoSecao
+        carregando={false}
+        erro={new Error("Token expirado")}
+        tipoErro="nao_autenticado"
+        nomeSecao="meus agendamentos"
+      >
+        <div>Conteúdo protegido</div>
+      </EstadoSecao>,
+    );
+
+    const alerta = screen.getByRole("alert");
+    expect(alerta).toBeInTheDocument();
+    expect(screen.getByText("Acesso não autenticado")).toBeInTheDocument();
+    expect(screen.getByText("Token expirado")).toBeInTheDocument();
+    expect(screen.queryByText("Conteúdo protegido")).not.toBeInTheDocument();
+  });
+
+  it("renderiza erro de sem permissão (403)", () => {
+    render(
+      <EstadoSecao
+        carregando={false}
+        erro={new Error("Você não tem permissão para acessar este recurso")}
+        tipoErro="sem_permissao"
+        nomeSecao="painel administrativo"
+      >
+        <div>Conteúdo administrativo</div>
+      </EstadoSecao>,
+    );
+
+    const alerta = screen.getByRole("alert");
+    expect(alerta).toBeInTheDocument();
+    expect(screen.getByText("Sem permissão de acesso")).toBeInTheDocument();
+    expect(
+      screen.getByText("Você não tem permissão para acessar este recurso"),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText("Conteúdo administrativo"),
+    ).not.toBeInTheDocument();
+  });
+
   it("exibe o botão 'Tentar novamente' e dispara o callback quando clicado", () => {
     const tentarNovamenteMock = vi.fn();
 
