@@ -23,8 +23,6 @@ const ONDE_MORA: Record<string, Servico> = {
   servicos: "catalogo",
 
   usuarios: "usuarios",
-  auth: "usuarios",
-  cadastro: "usuarios",
 
   agendamentos: "agendamentos",
   feriados: "agendamentos",
@@ -58,19 +56,8 @@ export class ErroDaApi extends Error {
   }
 }
 
-function obterTokenArmazenado(): string | null {
-  try {
-    return (
-      sessionStorage.getItem("nubex_token") ??
-      localStorage.getItem("nubex_token")
-    );
-  } catch {
-    return null;
-  }
-}
-
 // "/avisos" -> "http://localhost:8080/api/avisos"
-export function enderecoDe(caminho: string): string {
+function enderecoDe(caminho: string): string {
   const recurso = caminho.replace(/^\//, "").split(/[/?]/)[0];
   const servico = ONDE_MORA[recurso];
 
@@ -92,13 +79,6 @@ async function pedir<T>(caminho: string, opcoes?: RequestInit): Promise<T> {
 
   if (opcoes?.body && !cabecalhos.has("Content-Type")) {
     cabecalhos.set("Content-Type", "application/json");
-  }
-
-  if (!cabecalhos.has("Authorization")) {
-    const token = obterTokenArmazenado();
-    if (token) {
-      cabecalhos.set("Authorization", `Bearer ${token}`);
-    }
   }
 
   const resposta = await fetch(enderecoDe(caminho), {
