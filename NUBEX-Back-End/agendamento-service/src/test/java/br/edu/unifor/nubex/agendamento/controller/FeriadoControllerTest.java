@@ -2,8 +2,10 @@ package br.edu.unifor.nubex.agendamento.controller;
 
 import br.edu.unifor.nubex.agendamento.dto.FeriadoResponse;
 import br.edu.unifor.nubex.agendamento.service.FeriadoService;
+import br.edu.unifor.nubex.common.config.NubexCommonAutoConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(FeriadoController.class)
+@ImportAutoConfiguration(NubexCommonAutoConfiguration.class)
 public class FeriadoControllerTest {
     @Autowired
     private MockMvc mockMvc;
