@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -24,9 +25,15 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  * Segurança compartilhada pelos cinco serviços (RNF013, RF073).
  *
  * Regras:
- *  - API sem estado (sem sessão): cada requisição precisa trazer o próprio token;
- *  - CSRF desligado, porque não usamos cookie de sessão (o ataque de CSRF
- *    depende de cookie enviado automaticamente pelo navegador);
+ *  - API sem estado (sem sessão do servidor): cada requisição precisa trazer o
+ *    próprio token. O token viaja em cookie HttpOnly, não em sessão -- nada do
+ *    estado de quem entrou fica guardado aqui;
+ *  - CSRF desligado, e a proteção contra ele hoje é o SameSite=Lax do cookie:
+ *    o navegador não manda o cookie em requisição que muda estado vinda de
+ *    outro site, e nossa API não tem GET que mude estado. Isso cobre o ataque;
+ *    o token de CSRF (CookieCsrfTokenRepository mais o front mandando o
+ *    cabeçalho X-XSRF-TOKEN) é reforço em cima, e exige mudança no front --
+ *    ligar só deste lado quebraria todo POST dele, login incluído;
  *  - tudo exige autenticação, exceto /actuator/health, o Swagger (quando ligado) e as
  *    rotas listadas em nubex.security.public-routes por cada serviço;
  *  - o token é conferido aqui mesmo, em cada serviço, pelo JwtDecoder que o
@@ -54,6 +61,7 @@ public class SecurityConfig {
             ApiAccessDeniedHandler accessDeniedHandler,
             NubexSecurityProperties securityProperties,
             JwtAuthenticationConverter conversorDeToken,
+            BearerTokenResolver resolvedorDeToken,
             @Value("${springdoc.swagger-ui.enabled:false}") boolean swaggerLigado) throws Exception {
 
         http
@@ -63,11 +71,19 @@ public class SecurityConfig {
                 .httpBasic(basic -> basic.disable())
                 .formLogin(form -> form.disable())
                 /*
-                 * Liga o filtro que lê o cabeçalho "Authorization: Bearer <token>",
-                 * confere a assinatura com a chave pública e põe o usuário no
-                 * contexto. É o que faz o @PreAuthorize ter com quem comparar.
+                 * Liga o filtro que acha o token na requisição, confere a
+                 * assinatura com a chave pública e põe o usuário no contexto. É o
+                 * que faz o @PreAuthorize ter com quem comparar.
                  */
                 .oauth2ResourceServer(recurso -> recurso
+                        /*
+                         * Onde procurar o token. Sem isto, o Spring olharia só o
+                         * cabeçalho Authorization, e o cookie HttpOnly que o front
+                         * manda em toda requisição chegaria aqui sem ser lido: 401
+                         * em tudo depois do login, com a credencial certa viajando
+                         * na requisição. Veja o ResolvedorDeTokenDeAcesso.
+                         */
+                        .bearerTokenResolver(resolvedorDeToken)
                         /*
                          * Estes dois repetem o que o exceptionHandling acima já
                          * define, e precisam ser repetidos: sem eles, o Spring usa
@@ -102,6 +118,19 @@ public class SecurityConfig {
     /**
      * CORS: só as origens configuradas podem chamar a API pelo navegador.
      * "*" é proibido de propósito: liberar tudo anula a proteção.
+     *
+     * <p>O setAllowCredentials(true) é o que permite cookie em chamada de outra
+     * origem, e em desenvolvimento toda chamada é de outra origem: o front está
+     * em localhost:5173 e a API em localhost:8081. Sem ele, o navegador recebe a
+     * resposta do login, não encontra o cabeçalho
+     * Access-Control-Allow-Credentials e <b>descarta a resposta inteira</b> --
+     * mesmo com status 200 e com o Set-Cookie dentro dela. O fetch rejeita, e o
+     * erro aparece só no console do navegador, não no log do servidor. É o tipo
+     * de falha que se procura no lugar errado por horas.
+     *
+     * <p>Combinar credenciais com origem "*" é proibido pela especificação, e o
+     * próprio Spring recusa subir nesse caso -- a verificação abaixo já
+     * impedia antes, e agora tem um segundo motivo para existir.
      */
     @Bean
     @ConditionalOnMissingBean(CorsConfigurationSource.class)
@@ -113,11 +142,33 @@ public class SecurityConfig {
         config.setAllowedOrigins(props.allowedOrigins());
         config.setAllowedMethods(props.allowedMethods());
         config.setAllowedHeaders(props.allowedHeaders());
+        config.setAllowCredentials(true);
         config.setMaxAge(props.maxAge());
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
+    }
+
+    /**
+     * Onde o token é procurado em cada requisição: cookie primeiro, cabeçalho
+     * como reserva. Fica nos cinco serviços de uma vez, porque mora aqui.
+     */
+    @Bean
+    @ConditionalOnMissingBean(BearerTokenResolver.class)
+    BearerTokenResolver bearerTokenResolver() {
+        return new ResolvedorDeTokenDeAcesso();
+    }
+
+    /**
+     * Monta o cookie de acesso. Só o usuario-service usa, porque só ele faz
+     * login, mas o bean nasce aqui porque o nome do cookie é o mesmo que o
+     * resolvedor acima procura -- os dois lados do acordo no mesmo lugar.
+     */
+    @Bean
+    @ConditionalOnMissingBean(CookieDeSessao.class)
+    CookieDeSessao cookieDeSessao(NubexSessaoProperties propriedades) {
+        return new CookieDeSessao(propriedades);
     }
 
     /** Senhas só como hash BCrypt: usado para gravar no cadastro e conferir no login. */

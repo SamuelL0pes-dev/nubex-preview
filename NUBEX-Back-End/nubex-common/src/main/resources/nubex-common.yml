@@ -34,6 +34,37 @@ nubex:
     # Chave pública que confere a assinatura do token, em base64 numa linha.
     # Vazio = nenhum token é aceito e toda rota protegida responde 401.
     chave-publica: ${JWT_CHAVE_PUBLICA:}
+  sessao:
+    # Os dois atributos do cookie de acesso que mudam de ambiente para ambiente.
+    #
+    # Ficam AQUI, na seção sem perfil e por variável de ambiente, e não dentro do
+    # perfil dev. O motivo é concreto: os serviços declaram
+    # spring.profiles.default=dev, então o perfil dev entra sozinho quando
+    # ninguém define SPRING_PROFILES_ACTIVE. Afrouxar o cookie dentro do dev
+    # faria um deploy que esquecesse essa variável servir a credencial sem
+    # proteção -- e sem falhar, porque a chave pública vem desta mesma seção e a
+    # API continuaria funcionando normalmente. Amarrado ao ambiente, o padrão
+    # seguro vale em qualquer perfil, e afrouxar exige escrever a variável.
+    #
+    # É o mesmo critério do CORS_ORIGINS e do JWT_CHAVE_PUBLICA acima:
+    # configuração vem do ambiente, nunca fixa no código.
+
+    # true = o navegador só manda o cookie por HTTPS.
+    # Serve em http://localhost, que o navegador trata como origem segura.
+    # Ponha false para abrir o front por endereço de rede sem HTTPS (testar no
+    # celular, por exemplo); sem isso o navegador descarta o cookie em silêncio,
+    # o front recebe 200 e mostra a pessoa logada, e todo clique responde 401
+    # sem uma linha no log do servidor.
+    cookie-seguro: ${COOKIE_SEGURO:true}
+
+    # Lax, Strict ou None. O Lax é o que protege contra CSRF enquanto o token de
+    # CSRF não existir, e basta quando portal e API compartilham o domínio
+    # registrável -- porta diferente não conta, localhost:5173 e localhost:8081
+    # são o mesmo site. Ponha None (que exige cookie-seguro true) se o portal e
+    # a API ficarem em domínios diferentes, por exemplo o front numa hospedagem
+    # estática e a API em api.nubex.br: nesse caso o Lax bloqueia o cookie em
+    # TODA requisição depois do login, também sem nada no log.
+    cookie-same-site: ${COOKIE_SAME_SITE:Lax}
 
 ---
 spring:
@@ -45,6 +76,10 @@ nubex:
   cors:
     # 5173 = site público; 5174 = painel administrativo (ajustar se a porta for outra)
     allowed-origins: http://localhost:5173,http://localhost:5174
+  # O cookie de acesso NÃO é afrouxado aqui de propósito: como este perfil é o
+  # padrão (spring.profiles.default=dev), qualquer coisa afrouxada nele vale
+  # também num deploy que esqueça de definir o perfil. As duas propriedades
+  # ficam na seção sem perfil, por variável de ambiente.
 
 springdoc:
   api-docs:

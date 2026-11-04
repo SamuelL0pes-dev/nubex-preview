@@ -23,7 +23,8 @@ import org.springframework.context.annotation.Import;
 @EnableConfigurationProperties({
         CorsProperties.class,
         NubexSecurityProperties.class,
-        NubexJwtProperties.class
+        NubexJwtProperties.class,
+        NubexSessaoProperties.class
 })
 @Import({
         SecurityConfig.class,

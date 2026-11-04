@@ -36,6 +36,36 @@ public class AutenticacaoService {
      */
     private static final String CREDENCIAIS_INVALIDAS = "E-mail, matrícula ou senha incorretos";
 
+    /**
+     * O resultado de um login que deu certo, com as duas partes separadas: o
+     * {@code token}, que o controller põe no cookie, e o {@code corpo}, que vai
+     * no JSON da resposta.
+     *
+     * <p>Existe por causa da mudança para cookie. Antes o token era um campo do
+     * LoginResposta e saía junto com o resto; agora ele sai por outro caminho, e
+     * misturar os dois num só objeto deixaria fácil alguém devolver o token no
+     * corpo sem perceber -- que é exatamente o que a mudança veio desfazer.
+     *
+     * @param token o JWT assinado. Credencial: não vai para log nem para o corpo
+     *     da resposta
+     * @param validadeEmSegundos quanto tempo o token vale, para o Max-Age do
+     *     cookie
+     * @param corpo o que o front recebe em JSON
+     */
+    public record Acesso(String token, long validadeEmSegundos, LoginResposta corpo) {
+
+        /**
+         * O toString() que o record geraria sozinho imprimiria o token inteiro.
+         * Quem tem uma cópia dele entra como a pessoa até ele vencer, então ele
+         * não aparece em log em lugar nenhum.
+         */
+        @Override
+        public String toString() {
+            return "Acesso[token=omitido, validadeEmSegundos=" + validadeEmSegundos
+                    + ", corpo=" + corpo + "]";
+        }
+    }
+
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmissorDeToken emissorDeToken;
@@ -93,7 +123,7 @@ public class AutenticacaoService {
      * da conta, quando ela existe.
      */
     @Transactional(readOnly = true)
-    public LoginResposta entrar(LoginRequisicao requisicao) {
+    public Acesso entrar(LoginRequisicao requisicao) {
         Optional<Usuario> encontrado = procurar(requisicao.identificador());
 
         if (encontrado.isEmpty()) {
@@ -115,10 +145,11 @@ public class AutenticacaoService {
         }
 
         log.info("Login concluído para o usuário {}", usuario.getId());
-        return LoginResposta.de(
+        long validade = emissorDeToken.validadeEmSegundos();
+        return new Acesso(
                 emissorDeToken.emitir(usuario),
-                emissorDeToken.validadeEmSegundos(),
-                usuario);
+                validade,
+                LoginResposta.de(validade, usuario));
     }
 
     /**
