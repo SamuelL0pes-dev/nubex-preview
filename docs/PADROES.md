@@ -90,8 +90,14 @@ Cada componente é uma pasta: `Nome.tsx` + `Nome.module.css` + `index.ts`.
 | entidade | singular | `Noticia`, `Edital` |
 | repository | entidade + `Repository` | `NoticiaRepository` |
 | controller | entidade + `Controller` | `NoticiaController` |
-| DTO de saída | entidade + papel | `NoticiaResumo`, `FaqResponse` |
+| DTO de lista | entidade + `Resumo` | `NoticiaResumo`, `EditalResumo` |
+| DTO completo | entidade + `Response` | `FaqResponse`, `PesquisadorResponse` |
 | pacote | minúsculo, sem acento | `br.edu.unifor.nubex.conteudo` |
+
+`Resumo` é recorte: leva só o que o cartão da lista mostra. `NoticiaResumo`
+não tem `conteudo`, `autorId` nem `ativo`. `Response` leva tudo que a tela
+precisa daquele recurso. Quando a lista e a tela de detalhe mostram a mesma
+coisa, existe só o `Response`.
 
 ### Banco
 
@@ -136,6 +142,8 @@ funcionalidade.
 - A API devolve **DTO**, nunca entidade. A entidade pode ter campos internos.
 - Entidade nova exige migração Flyway na mesma PR.
 - `ddl-auto` é sempre `validate`. Quem cria tabela é o Flyway.
+- Data de "hoje" sai de `FusoNubex.hoje()`. `LocalDate.now()` solto usa o fuso
+  do servidor e, num servidor em UTC, publica a notícia de hoje três horas antes.
 
 ### Front
 
@@ -146,6 +154,9 @@ funcionalidade.
 - Sem componente com `variant="home" | "unidade"`. Componentes separados.
 - Cor nunca é o único sinal de estado (WCAG 2.1 AA).
 - CSS Modules. Sem Tailwind, sem styled-components.
+- Rota de destino não fica escrita dentro do componente: vem de `constants/`.
+- Link cujo texto visível é genérico ("Leia", "Veja mais") precisa de
+  `aria-label` com o título do item (WCAG 2.4.4).
 
 ---
 
@@ -158,7 +169,10 @@ funcionalidade.
 | prefixo `/api` | `/api/noticias` |
 | recurso no plural | `/api/editais` |
 | filtro por query | `/api/noticias?limite=3` |
-| parâmetro numérico tem teto | `limite` é preso entre 1 e 20 |
+| parâmetro numérico tem padrão e teto | `limite` vale 3 por omissão e é preso entre 1 e 20 |
+
+O teto fica no service, não no controller: é regra de negócio, e o controller
+não tem regra. O controller só declara o `defaultValue`.
 
 ### Status
 
@@ -173,6 +187,11 @@ funcionalidade.
 
 A diferença entre `204` e `404` importa: `/api/editais/aberto` devolve `204`
 quando não há edital aberto, porque a pergunta foi respondida.
+
+Nada impede dois editais abertos ao mesmo tempo. `/api/editais/aberto` devolve
+**um**: o de `data_publicacao` mais recente, pelo `Pageable` de tamanho 1 no
+`buscarAbertos`. O mural tem um cartão de edital, então quem escolhe é o back,
+não o front.
 
 ### Rotas públicas
 
@@ -201,12 +220,20 @@ V20261023_1500__conteudo_cria_noticia_e_edital.sql
 | migração aplicada **não se edita** | o Flyway guarda o checksum e recusa subir |
 | mudou de ideia? nova migração com `ALTER TABLE` | o histórico é o registro da obra |
 | dados de exemplo vão em `db/dev/` | só rodam no perfil `dev`, nunca em produção |
+| seed de exemplo usa `R__` | é repetível: roda de novo quando o arquivo muda, sem nova versão |
 
-As duas pastas são ligadas pelo `application-dev.properties`:
+As duas pastas são ligadas por um bloco de perfil dentro do próprio
+`application.properties` do serviço, separado por `#---`:
 
 ```properties
+#---
+spring.config.activate.on-profile=dev
 spring.flyway.locations=classpath:db/migration,classpath:db/dev
 ```
+
+Fora do perfil `dev` a pasta `db/dev` não é nem lida. O `#---` é obrigatório:
+sem ele o arquivo inteiro passa a valer só em `dev`, e produção sobe sem porta
+nem banco.
 
 ---
 

@@ -35,7 +35,7 @@ public class Edital {
     @Column(name = "data_publicacao", nullable = false)
     private LocalDate dataPublicacao;
 
-    @Column(name = "data_encerramento")
+    @Column(name = "data_encerramento", nullable = false)
     private LocalDate dataEncerramento;
 
     @Column(nullable = false)

@@ -1,30 +1,24 @@
 package br.edu.unifor.nubex.conteudo.controller;
 
 import br.edu.unifor.nubex.conteudo.dto.EditalResumo;
-import br.edu.unifor.nubex.conteudo.repository.EditalRepository;
+import br.edu.unifor.nubex.conteudo.service.EditalService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-
 @RestController
 @RequestMapping("/api/editais")
 public class EditalController {
+    private final EditalService service;
 
-    private final EditalRepository editalRepository;
-
-    public EditalController(EditalRepository editalRepository) {
-        this.editalRepository = editalRepository;
+    public EditalController (EditalService service){
+        this.service = service;
     }
 
     @GetMapping("/aberto")
-    public ResponseEntity<EditalResumo> buscarAberto() {
-        return editalRepository
-                .findFirstByAtivoTrueAndDataEncerramentoGreaterThanEqualOrderByDataPublicacaoDesc(
-                        LocalDate.now())
-                .map(EditalResumo::de)
+    public ResponseEntity<EditalResumo> buscarAberto(){
+        return service.buscarAberto()
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.noContent().build());
     }

@@ -5,6 +5,7 @@ import { EstadoSecao } from "../../ui/EstadoSecao";
 import { Helice, Seta } from "./NewsBoard.icones";
 import NewsCard from "./NewsCard";
 import estilos from "./NewsBoard.module.css";
+import { ROTA_DA_LISTA } from "../../../constants/conteudo";
 
 const ATRASO_ENTRE_CARTOES = 210;
 
@@ -73,11 +74,11 @@ export default function NewsBoard() {
             </div>
 
             <p className={estilos.subtitulo}>
-              O que acontece no Núcleo e as oportunidades abertas para pesquisadores
-              e estudantes.
+              O que acontece no Núcleo e as oportunidades abertas para
+              pesquisadores e estudantes.
             </p>
 
-            <Link className={estilos.verTodos} to="/noticias">
+            <Link className={estilos.verTodos} to={ROTA_DA_LISTA}>
               Mais notícias <Seta />
             </Link>
           </div>

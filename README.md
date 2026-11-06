@@ -91,6 +91,12 @@ o script de inicialização não será repetido: crie os bancos faltantes ou use
 projeto Compose/volume para testes. Não apague dados existentes para resolver isso.
 Alterar a senha em `.env` também não altera a senha de um banco já inicializado.
 
+O conteudo-service traz um seed de exemplo em `db/dev`, carregado somente no
+perfil `dev` e como migração repetível (`R__`). Quem aplicou a versão anterior
+desse seed, que era numerada, tem no histórico uma versão sem arquivo
+correspondente: o perfil `dev` ignora esse caso e o serviço sobe normalmente.
+Fora do perfil `dev` a validação do Flyway continua completa.
+
 Verifique o estado das APIs:
 
 ```sh

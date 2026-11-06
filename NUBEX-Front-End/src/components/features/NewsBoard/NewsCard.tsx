@@ -9,7 +9,6 @@ const NOME_DA_CATEGORIA = {
   edital: "Edital",
 } as const;
 
-/** A sete dias ou menos o selo passa a contar o tempo que resta. */
 function textoDoPrazo(encerramento: string): string {
   const dias = diasAte(encerramento);
 
@@ -21,9 +20,7 @@ function textoDoPrazo(encerramento: string): string {
 
 type Props = {
   item: CartaoDoMural;
-  /** true quando a grade ja apareceu na tela */
   entrando?: boolean;
-  /** atraso em milissegundos, para um cartao entrar depois do outro */
   atraso?: number;
 };
 
@@ -80,7 +77,11 @@ export default function NewsCard({ item, entrando = true, atraso = 0 }: Props) {
         {item.resumo && <p className={estilos.resumo}>{item.resumo}</p>}
       </div>
 
-      <Link className={estilos.leia} to={destino}>
+      <Link
+        className={estilos.leia}
+        to={destino}
+        aria-label={`Leia: ${item.titulo}`}
+      >
         Leia <Seta />
       </Link>
     </article>
