@@ -1,5 +1,9 @@
 # Portal NUBEX
 
+> [!NOTE]
+> **Repositório de Demonstração / Preview (Em Desenvolvimento)**  
+> Este repositório é uma versão de demonstração técnica e portfólio do **Portal NUBEX** (Núcleo de Biologia Experimental – UNIFOR), um projeto institucional atualmente em desenvolvimento ativo. Apresenta a arquitetura de microsserviços (Java 17 / Spring Boot) e interface web (React 19 / TypeScript).
+
 Portal do Núcleo de Biologia Experimental da Unifor.
 
 ## Estrutura atual
